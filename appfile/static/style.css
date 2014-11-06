@@ -1,0 +1,57 @@
+#wrapper {
+    position: absolute;
+    width: 95%;
+    left: 2.5%;
+}
+
+.title {
+    text-align: center;
+    color: red;
+    font-size: 29px;
+    font-weight: bold;
+}
+
+#profile {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-weight: bold;
+}
+
+#navbar {
+    width: 1000px;
+    background-color: #AFEEEE;
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-weight: bold;
+}
+
+#navbar td {
+    text-align: center;
+    font-size: 17px;
+    color: black;
+    width: 133px;
+    border: 1px solid white;
+    padding: 4px 7px 4px 7px;
+}
+
+#contact {
+    position: relative;
+    top: 420px;
+    text-align: center;
+    font-size: 19px;
+}
+
+a:link {
+    text-decoration: none;
+    color: blue;
+}
+
+a:active {
+    text-decoration:blink;
+}
+
+a:hover {
+    color: orange;
+}
+

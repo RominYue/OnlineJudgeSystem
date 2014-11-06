@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../static/style.css">
+        <title>Online Judge System</title>
+    </head>
+    <body>
+        <div id = "wrapper">
+
+            <div id = "head">
+                <h1 class = "title">Welcome to Online Judge System</h1>
+            </div>
+
+            <div id = "profile">
+                <a href = "/"> Login </a>
+                <a href = "/"> Register </a>
+            </div>
+
+            <div>
+                <table id = "navbar">
+                    <td><a href = "/"> Home </a></td>
+                    <td><a href = "/"> Problemset </a></td>
+                    <td><a href = "/"> Status </a></td>
+                    <td><a href = "/"> Ranklist </a></td>
+                    <td><a href = "/"> Contest </a></td>
+                    <td><a href = "/"> F.A.Qs </a></td>
+                </table>
+            </div>
+
+            {% block content %}
+            {% endblock %}
+
+            <div id = "contact">
+                <p>OnlineJudge From Yomin</p>
+                Anything About Problems, Please Feel Free to Contact <a href = "mailto:yueming412@gmail.com">Me</a>
+            </div>
+        </div>
+    </body>
+</html>
