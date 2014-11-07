@@ -1,4 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-<p>This is register page</p>
+<div>
+    <form action = "/register" method="POST">
+        {{ form.csrf_token }}
+        <center><h2> Register Information </h2></center>
+        {% if error %}
+            <center><h3 class="error"> {{ error }}</h3></center>
+        {% endif %}
+
+        <table id = "register">
+            <tr>
+                <td>{{ form.userID.label }}</td>
+                <td>{{ form.userID(size = 20) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.nickname.label }}</td>
+                <td>{{ form.nickname(size = 20) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.password.label }}</td>
+                <td>{{ form.password(size = 20) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.rptpassword.label }}</td>
+                <td>{{ form.rptpassword(size = 20) }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit" name="submit"><input type = "reset" value="Reset" name="reset"></td>
+            </tr>
+        </table>
+    </form>
+</div>
 {% endblock %}
