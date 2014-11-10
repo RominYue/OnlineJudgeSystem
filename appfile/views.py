@@ -6,8 +6,18 @@ from appfile import app, login_manager
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from forms import RegisterForm, LoginForm
-from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR
+from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR
 from models import User
+
+def admin_required(func):
+    def wrappers():
+        if current_user.is_authenticated() and current_user.is_admin:
+            return func()
+        else:
+            return PERMISSION_ERROR
+
+    return wrappers
+
 
 #userid just a parameter, no absolute with member in User
 @login_manager.user_loader
@@ -17,7 +27,7 @@ def load_user(userid):
 @app.before_request
 def before_request():
     g.user = current_user
-    if g.user.is_active():
+    if g.user.is_authenticated():
         g.url = url_for('userinfo',userID = g.user.userID)
 
 
@@ -26,7 +36,13 @@ def before_request():
 def index():
     return render_template('index.html')
 
+@app.route('/admin')
+@admin_required
+def admin():
+    return render_template('admin.html')
+
 @app.route('/<userID>')
+@login_required
 def userinfo(userID):
     return render_template('index.html')
 
@@ -77,8 +93,9 @@ def register():
         else:
             user = User(form.userID.data, form.nickname.data,form.password.data)
             user.save()
-            print user
-            return 'sucessfully register!'
+            print 'sucessfully register!'
+            login_user(user)
+            return redirect('/')
 
 @app.route('/logout')
 def logout():

@@ -41,7 +41,11 @@
     text-align: center;
     font-size: 19px;
 }
-
+#admin {
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
+}
 a:link {
     text-decoration: none;
     color: blue;
@@ -70,5 +74,27 @@ a:hover {
 }
 
 .error{
+    color: red;
+}
+
+#left {
+    /*background-color: #F0FFFF;*/
+    width: 99px;
+    line-height: 29px;
+    font-weight: bold;
+}
+#left a {
+    /*color: white;*/
+}
+#left a:hover {
+    color: red;
+}
+#right {
+
+}
+#right a {
+    color: white;
+}
+#right a:hover {
     color: red;
 }

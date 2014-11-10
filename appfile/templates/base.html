@@ -15,8 +15,11 @@
             </div>
 
             <div id = "profile">
-                {% if g.user.is_active() %}
+                {% if g.user.is_authenticated() %}
                     <a href={{ g.url }}> {{ g.user.userID }}</a>
+                    {% if g.user.is_admin %}
+                        <a href="/admin" id="admin" color="red"> Admin </a>
+                    {% endif %}
                     <a href="/logout"> Logout </a>
                 {% else %}
                     <a href = "/login"> Login </a>
