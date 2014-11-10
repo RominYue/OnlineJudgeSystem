@@ -4,9 +4,9 @@ ROLE_USER = 0
 ROEL_ADMIN = 1
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    userID = db.Column(db.String(22), index = True, unique = True)
-    nickname = db.Column(db.String(22))
+    #id = db.Column(db.Integer, primary_key = True)
+    userID = db.Column(db.String(22), primary_key = True, unique = True)
+    nickname = db.Column(db.String(22),unique = True)
     password = db.Column(db.String(100), index = True, unique = True)
     role = db.Column(db.SmallInteger, default = ROLE_USER)
 

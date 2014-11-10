@@ -1,12 +1,17 @@
 #!/usr/bin/env python2
 # -*- coding:utf-8 -*-
 
-from appfile import app
+from appfile import app, login_manager
 
 from flask import render_template,request,g
 from forms import RegisterForm
 from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR
 from models import User
+
+
+
+
+
 
 @app.route('/')
 @app.route('/index')
