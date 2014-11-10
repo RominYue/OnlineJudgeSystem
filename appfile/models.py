@@ -18,8 +18,8 @@ class User(db.Model):
     def __repr__(self):
         return '<User %s>' % (self.nickname)
 
-    def is_authenticated(self):
-        return True
+    #def is_authenticated(self):
+    #    return True
 
     def is_active(self):
         return True

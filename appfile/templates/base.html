@@ -15,8 +15,13 @@
             </div>
 
             <div id = "profile">
-                <a href = "/login"> Login </a>
-                <a href = "/register"> Register </a>
+                {% if g.user.is_active() %}
+                    <a href={{ g.url }}> {{ g.user.userID }}</a>
+                    <a href="/logout"> Logout </a>
+                {% else %}
+                    <a href = "/login"> Login </a>
+                    <a href = "/register"> Register </a>
+                {% endif %}
             </div>
 
             <div>
