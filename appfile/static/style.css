@@ -62,6 +62,13 @@ a:hover {
     background-color: #F0FFFF;
 }
 
+#login {
+    width: 333px;
+    height: 100px;
+    margin: 0 auto;
+    background-color: #F0FFFF;
+}
+
 .error{
     color: red;
 }

@@ -18,6 +18,18 @@ class User(db.Model):
     def __repr__(self):
         return '<User %s>' % (self.nickname)
 
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.userID
+
     def save(self):
         db.session.add(self)
         db.session.commit()

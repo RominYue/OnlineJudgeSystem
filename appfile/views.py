@@ -3,12 +3,16 @@
 
 from appfile import app, login_manager
 
-from flask import render_template,request,g
-from forms import RegisterForm
-from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR
+from flask import render_template,request,g, redirect
+from flask.ext.login import login_user, logout_user, login_required, current_user
+from forms import RegisterForm, LoginForm
+from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR
 from models import User
 
 
+@login_manager.user_loader
+def load_user(userID):
+    return User.query.get(userID)
 
 
 
@@ -18,9 +22,28 @@ from models import User
 def index():
     return render_template('index.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET','POST'])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if request.method == 'GET':
+        return render_template('login.html',form = form)
+    else:
+        user = User.query.filter_by(userID = form.userID.data).first()
+        if user is None:
+            error = CHECK_USERID_ERROR
+        elif user.password != form.password.data:
+            error = CHECK_PASSWORD_ERROR
+        else:
+            error = None
+
+        if error:
+            return render_template('login.html',form=form, error = error)
+        else:
+            login_user(user)
+            print repr(user) + 'login_user sucessfully'
+            logout_user()
+            print repr(user) + 'logout sucessfully'
+            return redirect('/')
 
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -36,6 +59,8 @@ def register():
             error = PASSWORD_ERROR
         elif not form.validate_equal():
             error = EQUAL_ERROR
+        elif User.query.get(form.userID.data) is not None:
+            error = EXIST_ERROR
         else:
             error = None
 

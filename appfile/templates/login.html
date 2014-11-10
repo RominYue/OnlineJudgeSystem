@@ -1,4 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<p>This is login page</p>
+<div>
+    <form action="/login" method="POST">
+        {{ form.csrf_token }}
+        <center><h2> Login Information </h2></center>
+        {% if error %}
+            <center><h3 class="error">{{ error }}</h3>></center>
+        {% endif %}
+        <table id="login">
+            <tr>
+                <td>{{ form.userID.label }}: </td>
+                <td>{{ form.userID(size = 20 )}}</td>
+            </tr>
+            <tr>
+                <td>{{ form.password.label }}: </td>
+                <td>{{ form.password(size = 20) }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input value="Submit" name="submit" type="submit">
+                    <input value="Reset" name="reset" type="reset">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
 {% endblock %}

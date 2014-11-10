@@ -20,3 +20,14 @@ class RegisterForm(Form):
 
     def validate_equal(self):
         return self.password.data == self.rptpassword.data
+
+
+class LoginForm(Form):
+    userID = TextField('user ID')
+    password = PasswordField('Password')
+
+    def validate_userID(self):
+        return re.match(r'^[a-zA-Z0-9]{4,23}$', self.userID.data)
+
+    def validate_password(self):
+        return re.match(r'^[a-zA-Z0-9]{6,22}$', self.password.data)
