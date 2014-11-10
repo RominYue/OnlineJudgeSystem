@@ -6,6 +6,7 @@ from appfile import app
 from flask import render_template,request,g
 from forms import RegisterForm
 from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR
+from models import User
 
 @app.route('/')
 @app.route('/index')
@@ -36,7 +37,10 @@ def register():
         if error:
             return render_template('register.html',form=form, error=error)
         else:
-            return render_template('index.html')
+            user = User(form.userID.data, form.nickname.data,form.password.data)
+            user.save()
+            print user
+            return 'sucessfully register!'
 
 @app.route('/problemset')
 def problemset():
