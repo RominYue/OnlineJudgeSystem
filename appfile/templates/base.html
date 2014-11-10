@@ -18,12 +18,12 @@
                 {% if g.user.is_authenticated() %}
                     <a href={{ g.url }}> {{ g.user.userID }}</a>
                     {% if g.user.is_admin %}
-                        <a href="/admin" id="admin" color="red"> Admin </a>
+                        <a href="/admin/" id="admin" color="red"> Admin </a>
                     {% endif %}
-                    <a href="/logout"> Logout </a>
+                    <a href="/logout/"> Logout </a>
                 {% else %}
-                    <a href = "/login"> Login </a>
-                    <a href = "/register"> Register </a>
+                    <a href = "/login/"> Login </a>
+                    <a href = "/register/"> Register </a>
                 {% endif %}
             </div>
 

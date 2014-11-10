@@ -31,3 +31,29 @@ class User(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+
+class Problem(db.Model):
+    pid = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(299))
+    description = db.Column(db.String(9999))
+    pinput = db.Column(db.String(9999))
+    poutput = db.Column(db.String(9999))
+    sinput = db.Column(db.String(9999))
+    soutput = db.Column(db.String(9999))
+    hint = db.Column(db.String(9999))
+
+    def __init__(self, title, description, pinput, poutput, sinput, hint):
+        self.title = title
+        self.desc = desc
+        self.pinput = pinput
+        self.poutput = poutput
+        self.sinput = sinput
+        self.soutput = soutput
+        self.hint = hint
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+

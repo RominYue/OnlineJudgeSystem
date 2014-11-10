@@ -5,18 +5,20 @@ from appfile import app, login_manager
 
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from forms import RegisterForm, LoginForm
+from forms import RegisterForm, LoginForm, ProblemForm
 from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR
-from models import User
+from models import User, Problem
+from functools import wraps
 
 def admin_required(func):
-    def wrappers():
+    @wraps(func)
+    def check():
         if current_user.is_authenticated() and current_user.is_admin:
             return func()
         else:
             return PERMISSION_ERROR
 
-    return wrappers
+    return check
 
 
 #userid just a parameter, no absolute with member in User
@@ -36,17 +38,17 @@ def before_request():
 def index():
     return render_template('index.html')
 
-@app.route('/admin')
+@app.route('/admin/')
 @admin_required
 def admin():
     return render_template('admin.html')
 
-@app.route('/<userID>')
+@app.route('/<userID>/')
 @login_required
 def userinfo(userID):
     return render_template('index.html')
 
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login/', methods=['GET','POST'])
 def login():
     form = LoginForm()
     if request.method == 'GET':
@@ -65,11 +67,9 @@ def login():
         else:
             login_user(user)
             print repr(user) + 'login_user sucessfully'
-            #logout_user()
-            #print repr(user) + 'logout sucessfully'
             return redirect('/')
 
-@app.route('/register',methods=['GET','POST'])
+@app.route('/register/',methods=['GET','POST'])
 def register():
     form = RegisterForm()
     if request.method == 'GET':
@@ -97,12 +97,26 @@ def register():
             login_user(user)
             return redirect('/')
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     print repr(current_user) + 'logged out....'
     logout_user()
     return redirect('/')
 
-@app.route('/problemset')
+@app.route('/problemset/')
 def problemset():
-    return render_template('base.html')
+    return render_template('problemset.html')
+
+@app.route('/admin/problemset/')
+@admin_required
+def admin_problemset():
+    return render_template('admin_problemset.html')
+
+
+@app.route('/admin/problemset/addproblem/', methods=['GET','POST'])
+@admin_required
+def admin_addproblem():
+    form = ProblemForm()
+    return render_template('admin_addproblem.html',form=form)
+
+

@@ -78,11 +78,17 @@ a:hover {
 }
 
 #left {
-    /*background-color: #F0FFFF;*/
-    width: 99px;
-    line-height: 29px;
+    width: 111px;
+    text-align: center;
     font-weight: bold;
+    color: blue;
 }
+
+#addproblem {
+    width: 80%;
+    margin: 0 auto;
+}
+
 #left a {
     /*color: white;*/
 }
@@ -97,4 +103,31 @@ a:hover {
 }
 #right a:hover {
     color: red;
+}
+#ptitle {
+    width: 99%;
+}
+#desc {
+    width: 99%;
+    height: 233px;
+}
+#input {
+    width: 99%;
+    height: 210px;
+}
+#output {
+    width: 99%;
+    height: 210px;
+}
+#sinput {
+    width: 99%;
+    height: 99px;
+}
+#soutput {
+    width: 99%;
+    height: 99px;
+}
+#hint {
+    width: 99%;
+    height: 99px;
 }

@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import TextField, BooleanField, PasswordField
+from wtforms import TextField, BooleanField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, Length, EqualTo
 import re
 
@@ -31,3 +31,13 @@ class LoginForm(Form):
 
     def validate_password(self):
         return re.match(r'^[a-zA-Z0-9]{6,22}$', self.password.data)
+
+
+class ProblemForm(Form):
+    title = TextField('Title', [Length(max = 299)])
+    description = TextAreaField('Description', [Length(max = 9999)])
+    pinput = TextAreaField('Input', [Length(max = 9999)])
+    poutput = TextAreaField('Output', [Length(max = 9999)])
+    sinput = TextAreaField('Sample Input', [Length(max = 9999)])
+    soutput = TextAreaField('Sample Output', [Length(max = 9999)])
+    hint = TextAreaField('Hint', [Length(max = 9999)])
