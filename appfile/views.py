@@ -6,9 +6,10 @@ from appfile import app, login_manager
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from forms import RegisterForm, LoginForm, ProblemForm
-from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR
+from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS
 from models import User, Problem
 from functools import wraps
+import os
 
 def admin_required(func):
     @wraps(func)
@@ -117,6 +118,20 @@ def admin_problemset():
 @admin_required
 def admin_addproblem():
     form = ProblemForm()
-    return render_template('admin_addproblem.html',form=form)
+    if request.method == 'GET':
+        return render_template('admin_addproblem.html',form=form)
+    else:
+        inputfile = request.files['inputfile']
+        outputfile = request.files['outputfile']
+        problem_count = Problem.query.count()
+        inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(problem_count + 1),'in'])))
+        outputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(problem_count + 1), 'out'])))
 
+        problem = Problem(form.title.data, form.description.data, form.pinput.data, form.poutput.data, form.sinput.data, form.soutput.data, form.hint.data)
+
+        problem.save()
+
+        print 'upload successfully!'
+
+        return redirect('/admin/problemset')
 

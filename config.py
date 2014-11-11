@@ -3,7 +3,7 @@ import os.path
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'tmp.db')
-
+UPLOAD_FOLDER = 'appfile/problems'
 
 CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
@@ -16,6 +16,8 @@ EXIST_ERROR = 'User ID has been registered!'
 CHECK_USERID_ERROR = 'User ID does not exist!'
 CHECK_PASSWORD_ERROR = 'Password is not correct!'
 PERMISSION_ERROR = "you are not admin!"
+INPUT_ERROR = 'Input Limit Exceeded'
+UPLOAD_SUCESS = 'Uploaded Successfully'
 
 ADMIN_USERID = 'guest'
 ADMIN_NICKNAME = 'guest'

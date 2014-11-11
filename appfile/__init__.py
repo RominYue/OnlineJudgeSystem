@@ -4,6 +4,7 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
+import os,sys
 
 FLASKS_ETTINGS = '../config.py'
 
@@ -17,4 +18,7 @@ login_manager.login_view = '/login'
 
 from appfile import views
 from models import User
+
+print os.path.abspath(sys.path[0])
+
 

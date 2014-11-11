@@ -43,9 +43,9 @@ class Problem(db.Model):
     soutput = db.Column(db.String(9999))
     hint = db.Column(db.String(9999))
 
-    def __init__(self, title, description, pinput, poutput, sinput, hint):
+    def __init__(self, title, description, pinput, poutput, sinput, soutput, hint):
         self.title = title
-        self.desc = desc
+        self.description = description
         self.pinput = pinput
         self.poutput = poutput
         self.sinput = sinput
