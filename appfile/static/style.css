@@ -4,6 +4,13 @@
     left: 2.5%;
 }
 
+#wrapper2 {
+    position: relative;
+    width: 1000px;
+    top: 20px;
+    margin: 0 auto;
+}
+
 .title {
     text-align: center;
     color: red;
@@ -71,6 +78,12 @@ a:hover {
     height: 100px;
     margin: 0 auto;
     background-color: #F0FFFF;
+}
+
+#admin {
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
 }
 
 .error{

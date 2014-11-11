@@ -3,21 +3,43 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" type="text/css" href="../static/style.css">
+        <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
         <title> Online Judge From Yomin / Admin </title>
     </head>
     <div id="wrapper">
+
         <div id="head">
-            <h1 id="title"> Admin </h1>
+            <h1 class="title"> Admin </h1>
         </div>
-        <div id="left">
-            <table>
-                <tr><td><a href="/"> Home </a></td></tr>
-                <tr><td><a href="/admin/problemset/"> Problemset </a></td></tr>
-                <tr><td><a href="/"> Contest </a></td></tr>
-            </table>
+
+        <div id="profile">
+            {% if g.user.is_authenticated() %}
+                <a href={{ g.url }}> {{ g.user.userid }} </a>
+                <a href="/logout/"> Logout </a>
+                <a href='/' id="admin"> Home </a>
+            {% else %}
+                <a href="/login/"> Login </a>
+                <a href="/register/"> Register </a>
+            {% endif %}
         </div>
-        {% block content %}
-        {% endblock %}
+
+        <div>
+            <table id="navbar"><tr>
+                <td><a href="/admin/"> Admin Page </a></td>
+                <td><a href="/admin/problemset/"> Problemset </a></td>
+                <td><a href="/admin/"> Contest </a></td>
+            </table></tr>
+        </div>
+
+        <div id="wrapper2">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div id="contact">
+            <hr />
+            OnlineJudge From Yomin<br \>
+            Anything about the Problems, Please Contact <a href="mailto:yueming412t@gmail.com"> Me </a>
+        </div>
     </div>
 </html>

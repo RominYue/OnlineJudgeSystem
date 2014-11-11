@@ -39,11 +39,6 @@ def before_request():
 def index():
     return render_template('index.html')
 
-@app.route('/admin/')
-@admin_required
-def admin():
-    return render_template('admin.html')
-
 @app.route('/<userID>/')
 @login_required
 def userinfo(userID):
@@ -119,6 +114,13 @@ def problemset(page = 1):
     problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * 100 : min(problem_count, page*100)]
 
     return render_template('problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
+
+
+@app.route('/admin/')
+@admin_required
+def admin():
+    return render_template('admin.html')
+
 
 @app.route('/admin/problemset/')
 @admin_required
