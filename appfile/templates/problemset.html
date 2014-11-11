@@ -1,3 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
+<center>
+    {% for i in range(1, Page_Max + 1) %}
+        {% if i == page %}
+            {{ i }}
+        {% else %}
+            <a href="/problemset/page={{ i }}"> {{ i }} </a>
+        {% endif %}
+    {% endfor %}
+</center>
+
+<table id = "problemset">
+    <tr>
+        <th id="ps_is_ac"></th>
+        <th id="ps_pid"> Problem ID </th>
+        <th id="ps_title"> Title </th>
+        <th id="ps_ac"> AC Rate </th>
+        <th id="ps_submit"> Submit </th>
+    </tr>
+</table>
 {% endblock %}

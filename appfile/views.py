@@ -105,8 +105,20 @@ def logout():
     return redirect('/')
 
 @app.route('/problemset/')
-def problemset():
-    return render_template('problemset.html')
+@app.route('/problemset/page=<int:page>/')
+def problemset(page = 1):
+    problem_count = Problem.query.count()
+
+    Page_Max = problem_count/3
+    if problem_count % 3 != 0:
+        Page_Max += 1
+
+    if page not in range(1,Page_Max + 1):
+        return 'error page'
+
+    problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * 100 : min(problem_count, page*100)]
+
+    return render_template('problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
 
 @app.route('/admin/problemset/')
 @admin_required

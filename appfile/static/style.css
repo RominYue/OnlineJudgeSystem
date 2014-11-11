@@ -131,3 +131,37 @@ a:hover {
     width: 99%;
     height: 99px;
 }
+
+#problemset {
+    width: 89%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 15px;
+}
+
+#problemset th {
+    padding: 4px 7px 4px 7px;
+    background-color: #1A5CC8;
+    border: 1px solid white;
+    color: white;
+}
+
+#ps_is_ac {
+    width: 50px;
+}
+
+#ps_pid {
+    width: 120px;
+}
+
+#ps_title {
+    width: 675px;
+}
+
+#ps_ac {
+    width: 66px;
+}
+
+#ps_submit {
+    width: 66px;
+}

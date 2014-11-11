@@ -16,9 +16,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = '/login'
 
-from appfile import views
-from models import User
-
 print os.path.abspath(sys.path[0])
 
 
