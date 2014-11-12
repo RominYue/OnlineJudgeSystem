@@ -16,7 +16,7 @@
     <div> {{ problem.hint }} </div>
 </div>
 <center>
-    <a href="/">Submit</a>
+    <a href={{ url_for('submit', pid = problem.pid) }}> Submit </a>
     Status
     Discuss
 </center>

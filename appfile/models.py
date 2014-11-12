@@ -44,6 +44,7 @@ class Problem(db.Model):
     hint = db.Column(db.Text)
     ac_count = db.Column(db.Integer, default = 0)
     submit_count = db.Column(db.Integer, default = 0)
+    visable = db.Column(db.Boolean, default = True)
 
     def __init__(self, title, description, pinput, poutput, sinput, soutput, hint):
         self.title = title

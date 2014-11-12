@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding:utf-8 -*-
 
-from appfile import app, login_manager
+from appfile import app, login_manager, db
 
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
@@ -13,9 +13,9 @@ import os
 
 def admin_required(func):
     @wraps(func)
-    def check():
+    def check(*args, **kw):
         if current_user.is_authenticated() and current_user.is_admin:
-            return func()
+            return func(*args,**kw)
         else:
             return PERMISSION_ERROR
 
@@ -120,6 +120,11 @@ def show_problem(pid):
     problem = Problem.query.get(pid)
     return render_template('showproblem.html', problem=problem)
 
+@app.route('/submit/pid=<int:pid>/')
+def submit(pid):
+    print url_for('submit', pid = pid)
+    return render_template('submit.html')
+
 @app.route('/admin/')
 @admin_required
 def admin():
@@ -127,10 +132,21 @@ def admin():
 
 
 @app.route('/admin/problemset/')
+@app.route('/admin/problemset/page=<int:page>')
 @admin_required
-def admin_problemset():
-    return render_template('admin_problemset.html')
+def admin_problemset(page = 1):
+    problem_count = Problem.query.count()
 
+    Page_Max = problem_count/3
+    if problem_count % 3 != 0:
+        Page_Max += 1
+
+    if page not in range(1,Page_Max + 1) and problem_count != 0:
+        return 'error page'
+
+    problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * 3 : min(problem_count, page*3)]
+
+    return render_template('admin_problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
 
 @app.route('/admin/problemset/addproblem/', methods=['GET','POST'])
 @admin_required
@@ -152,4 +168,27 @@ def admin_addproblem():
         print 'upload successfully!'
 
         return redirect('/admin/problemset')
+
+@app.route('/admin/editproblem/<int:pid>/')
+@admin_required
+def admin_edit_problem(pid):
+    return render_template('admin_editproblem.html')
+
+@app.route('/admin/hideproblem/<int:pid>/')
+@admin_required
+def admin_hide_problem(pid):
+    problem = Problem.query.get(pid)
+    problem.visable = False
+    db.session.commit()
+    print problem.visable
+    return redirect('/admin/problemset')
+
+
+@app.route('/admin/displayproblem/<int:pid>/')
+@admin_required
+def admin_display_problem(pid):
+    problem = Problem.query.get(pid)
+    problem.visable = True
+    db.session.commit()
+    return redirect('/admin/problemset')
 
