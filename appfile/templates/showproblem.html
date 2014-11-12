@@ -1,19 +1,55 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="problem">
-    <center><h2> {{ problem.title }} </h2></center>
+     <center><span style="font-size:29px; font-weight:bold; color:blue"> {{ problem.title }} </span></center>
+     <table>
+         <tr>
+             <td><b>Time Limit:</b> {{ problem.time_limit }} MS </td>
+             <td width="10px"></td>
+             <td><b>Memory Limit:</b> {{ problem.memory_limit}} K </td>
+         </tr>
+         <tr>
+             <td><b> Total Submissions: </b> {{ problem.submit_count }} </td>
+             <td width="10px"></td>
+             <td><b> Accepted: </b> {{ problem.ac_count }} </td>
+         </tr>
+     </table>
     <h2> Description </h2>
-    <div> {{ problem.description }} </div>
+    <div>
+        {% autoescape false %}
+        {{ problem.description }}
+        {% endautoescape %}
+    </div>
     <h2> Input </h2>
-    <div> {{ problem.pinput }} </div>
+    <div>
+        {% autoescape false %}
+        {{ problem.pinput }}
+        {% endautoescape %}
+    </div>
     <h2> Output </h2>
-    <div> {{ problem.poutput }} </div>
+    <div>
+        {% autoescape false %}
+        {{ problem.poutput }}
+        {% endautoescape %}
+    </div>
     <h2> Sample Input </h2>
-    <div> {{ problem.sinput }} </div>
+    <div>
+        {% autoescape false %}
+        {{ problem.sinput }}
+        {% endautoescape %}
+    </div>
     <h2> Sample Output </h2>
-    <div> {{ problem.soutput }} </div>
+    <div>
+        {% autoescape false %}
+        {{ problem.soutput }}
+        {% endautoescape %}
+    </div>
     <h2> Hint </h2>
-    <div> {{ problem.hint }} </div>
+    <div>
+        {% autoescape false %}
+        {{ problem.hint }}
+        {% endautoescape %}
+    </div>
 </div>
 <center>
     <a href={{ url_for('submit', pid = problem.pid) }}> Submit </a>

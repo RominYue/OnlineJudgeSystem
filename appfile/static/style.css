@@ -185,16 +185,19 @@ a:hover {
 #problem {
     width: 88%;
     margin: 0 auto;
-    font-family: Courier New,Courier,monospace;
+    font-family: Arial, Helvetica, monospace;
 }
 
 #problem h2 {
     color: blue;
 }
 
+#problem table {
+    margin: 0 auto;
+}
 #problem div {
     background: #E4F0F8;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 24px;
     height: auto;
     padding: 0px 20px;

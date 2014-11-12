@@ -111,7 +111,7 @@ def problemset(page = 1):
     if page not in range(1,Page_Max + 1):
         return 'error page'
 
-    problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * 3 : min(problem_count, page*3)]
+    problem_list = Problem.query.filter_by(visable = True).order_by(Problem.pid)[(page - 1) * 3 : min(problem_count, page*3)]
 
     return render_template('problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
 
@@ -161,7 +161,7 @@ def admin_addproblem():
         inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(problem_count + 1),'in'])))
         outputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(problem_count + 1), 'out'])))
 
-        problem = Problem(form.title.data, form.description.data, form.pinput.data, form.poutput.data, form.sinput.data, form.soutput.data, form.hint.data)
+        problem = Problem(form.title.data, form.description.data, form.pinput.data, form.poutput.data, form.sinput.data, form.soutput.data, form.hint.data, form.time_limit.data, form.memory_limit.data)
 
         problem.save()
 

@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import TextField, BooleanField, PasswordField, TextAreaField
+from wtforms import TextField, BooleanField, PasswordField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, Length, EqualTo
 import re
 
@@ -41,3 +41,5 @@ class ProblemForm(Form):
     sinput = TextAreaField('Sample Input', [Length(max = 9999)])
     soutput = TextAreaField('Sample Output', [Length(max = 9999)])
     hint = TextAreaField('Hint', [Length(max = 9999)])
+    time_limit = IntegerField('Time Limit',[DataRequired()])
+    memory_limit = IntegerField('Memory Limit', [DataRequired()])

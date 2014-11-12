@@ -19,23 +19,13 @@
         <th id="ps_submit"> Submit </th>
     </tr>
     {% for problem in problem_list %}
-        {% if problem.pid % 2 %}
-            <tr>
+            <tr style={{ loop.cycle('',"background-color:#D7EBFF") }}>
                 <td></td>
                 <td> {{ problem.pid + 1000 }} </td>
                 <td align="left"><a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.title }} </a></td>
                 <td>{{ problem.ac_count }}</td>
                 <td>{{ problem.submit_count }}</td>
             </tr>
-        {% else %}
-            <tr style="background-color:#D7EBFF">
-                <td></td>
-                <td> {{ problem.pid + 1000 }} </td>
-                <td align="left"><a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.title }} </a></td>
-                <td>{{ problem.ac_count }}</td>
-                <td>{{ problem.submit_count }}</td>
-            </tr>
-        {% endif %}
     {% endfor %}
 </table>
 {% endblock %}

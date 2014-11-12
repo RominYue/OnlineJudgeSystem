@@ -19,8 +19,7 @@
         <th id="ps_submit"> Hide </th>
     </tr>
     {% for problem in problem_list %}
-        {% if problem.pid % 2 %}
-            <tr>
+            <tr style={{ loop.cycle('',"background-color:#D7EBFF") }}>
                 <td> {{ problem.pid + 1000 }} </td>
                 <td align="left"> {{ problem.title }} </td>
                 <td><a href={{ url_for('admin_edit_problem', pid=problem.pid) }}> [Edit] </a></td>
@@ -30,18 +29,6 @@
                     <td><a href={{ url_for('admin_display_problem',pid = problem.pid) }}> [Display] </a></td>
                 {% endif %}
             </tr>
-        {% else %}
-            <tr style="background-color:#D7EBFF">
-                <td> {{ problem.pid + 1000 }} </td>
-                <td align="left"> {{ problem.title }} </td>
-                <td><a href={{ url_for('admin_edit_problem', pid=problem.pid) }}> [Edit] </a></td>
-                {% if problem.visable %}
-                    <td><a href={{ url_for('admin_hide_problem', pid = problem.pid) }}> [Hide] </a></td>
-                {% else %}
-                    <td><a href={{ url_for('admin_display_problem',pid = problem.pid) }}> [Display] </a></td>
-                {% endif %}
-            </tr>
-        {% endif %}
     {% endfor %}
 </table>
 {% endblock %}

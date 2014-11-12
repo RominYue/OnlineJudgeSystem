@@ -4,6 +4,8 @@
 <form action="/admin/problemset/addproblem/" method="POST" enctype="multipart/form-data">
     <table id="addproblem">
         <tr><td id="left"> Title </td><td> {{ form.title(id="ptitle") }}</td></tr>
+        <tr><td id="left"> Time Limit </td><td> {{ form.time_limit(id = "ptitle") }} MS</td></tr>
+        <tr><td id="left"> Memory Limit </td><td> {{ form.memory_limit(id = "ptitle") }} K</td></tr>
         <tr><td id="left"> Description </td><td> {{ form.description(id="desc") }} </td></tr>
         <tr><td id="left"> Input </td><td> {{ form.pinput(id="input") }} </td></tr>
         <tr><td id="left"> Output </td><td> {{ form.poutput(id="output") }} </td></tr>

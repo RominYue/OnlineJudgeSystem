@@ -42,11 +42,13 @@ class Problem(db.Model):
     sinput = db.Column(db.Text)
     soutput = db.Column(db.Text)
     hint = db.Column(db.Text)
+    time_limit = db.Column(db.Integer)
+    memory_limit = db.Column(db.Integer)
     ac_count = db.Column(db.Integer, default = 0)
     submit_count = db.Column(db.Integer, default = 0)
     visable = db.Column(db.Boolean, default = True)
 
-    def __init__(self, title, description, pinput, poutput, sinput, soutput, hint):
+    def __init__(self, title, description, pinput, poutput, sinput, soutput, hint,time_limit, memory_limit):
         self.title = title
         self.description = description
         self.pinput = pinput
@@ -54,6 +56,8 @@ class Problem(db.Model):
         self.sinput = sinput
         self.soutput = soutput
         self.hint = hint
+        self.time_limit = time_limit
+        self.memory_limit = memory_limit
 
     def save(self):
         db.session.add(self)
