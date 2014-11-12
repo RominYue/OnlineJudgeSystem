@@ -1,6 +1,6 @@
 {% extends "admin_base.html" %}
 {% block content %}
-<h3><center> Problem Information </center></h3>
+<center><h3> Problem Information </h3></center>
 <form action="/admin/problemset/addproblem/" method="POST" enctype="multipart/form-data">
     <table id="addproblem">
         <tr><td id="left"> Title </td><td> {{ form.title(id="ptitle") }}</td></tr>

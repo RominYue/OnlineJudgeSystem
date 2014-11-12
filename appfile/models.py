@@ -36,12 +36,14 @@ class User(db.Model):
 class Problem(db.Model):
     pid = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(299))
-    description = db.Column(db.String(9999))
-    pinput = db.Column(db.String(9999))
-    poutput = db.Column(db.String(9999))
-    sinput = db.Column(db.String(9999))
-    soutput = db.Column(db.String(9999))
-    hint = db.Column(db.String(9999))
+    description = db.Column(db.Text)
+    pinput = db.Column(db.Text)
+    poutput = db.Column(db.Text)
+    sinput = db.Column(db.Text)
+    soutput = db.Column(db.Text)
+    hint = db.Column(db.Text)
+    ac_count = db.Column(db.Integer, default = 0)
+    submit_count = db.Column(db.Integer, default = 0)
 
     def __init__(self, title, description, pinput, poutput, sinput, soutput, hint):
         self.title = title

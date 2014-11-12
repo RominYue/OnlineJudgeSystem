@@ -111,10 +111,13 @@ def problemset(page = 1):
     if page not in range(1,Page_Max + 1):
         return 'error page'
 
-    problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * 100 : min(problem_count, page*100)]
+    problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * 3 : min(problem_count, page*3)]
 
     return render_template('problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
 
+@app.route('/showproblem/pid=<int:pid>/')
+def show_problem(pid):
+    return render_template('showproblem.html')
 
 @app.route('/admin/')
 @admin_required

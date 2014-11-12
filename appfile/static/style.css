@@ -152,6 +152,9 @@ a:hover {
     font-size: 15px;
 }
 
+#problemset td,th {
+    font-size: 18px;
+}
 #problemset th {
     padding: 4px 7px 4px 7px;
     background-color: #1A5CC8;

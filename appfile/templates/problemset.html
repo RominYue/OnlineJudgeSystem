@@ -18,5 +18,24 @@
         <th id="ps_ac"> AC Rate </th>
         <th id="ps_submit"> Submit </th>
     </tr>
+    {% for problem in problem_list %}
+        {% if problem.pid % 2 %}
+            <tr>
+                <td></td>
+                <td> {{ problem.pid + 1000 }} </td>
+                <td align="left">{{ problem.title }}</td>
+                <td>{{ problem.ac_count }}</td>
+                <td>{{ problem.submit_count }}</td>
+            </tr>
+        {% else %}
+            <tr style="background-color:#D7EBFF">
+                <td></td>
+                <td> {{ problem.pid + 1000 }} </td>
+                <td align="left">{{ problem.title }}</td>
+                <td>{{ problem.ac_count }}</td>
+                <td>{{ problem.submit_count }}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
 </table>
 {% endblock %}
