@@ -23,7 +23,7 @@
             <tr>
                 <td></td>
                 <td> {{ problem.pid + 1000 }} </td>
-                <td align="left">{{ problem.title }}</td>
+                <td align="left"><a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.title }} </a></td>
                 <td>{{ problem.ac_count }}</td>
                 <td>{{ problem.submit_count }}</td>
             </tr>
@@ -31,7 +31,7 @@
             <tr style="background-color:#D7EBFF">
                 <td></td>
                 <td> {{ problem.pid + 1000 }} </td>
-                <td align="left">{{ problem.title }}</td>
+                <td align="left"><a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.title }} </a></td>
                 <td>{{ problem.ac_count }}</td>
                 <td>{{ problem.submit_count }}</td>
             </tr>

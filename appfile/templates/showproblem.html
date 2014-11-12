@@ -1,3 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
+<div id="problem">
+    <center><h2> {{ problem.title }} </h2></center>
+    <h2> Description </h2>
+    <div> {{ problem.description }} </div>
+    <h2> Input </h2>
+    <div> {{ problem.pinput }} </div>
+    <h2> Output </h2>
+    <div> {{ problem.poutput }} </div>
+    <h2> Sample Input </h2>
+    <div> {{ problem.sinput }} </div>
+    <h2> Sample Output </h2>
+    <div> {{ problem.soutput }} </div>
+    <h2> Hint </h2>
+    <div> {{ problem.hint }} </div>
+</div>
+<center>
+    <a href="/">Submit</a>
+    Status
+    Discuss
+</center>
 {% endblock %}

@@ -117,7 +117,8 @@ def problemset(page = 1):
 
 @app.route('/showproblem/pid=<int:pid>/')
 def show_problem(pid):
-    return render_template('showproblem.html')
+    problem = Problem.query.get(pid)
+    return render_template('showproblem.html', problem=problem)
 
 @app.route('/admin/')
 @admin_required
