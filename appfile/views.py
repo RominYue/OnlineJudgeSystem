@@ -21,6 +21,8 @@ def admin_required(func):
 
     return check
 
+def delete_data(file_name):
+    os.system('/'.join(['rm problems',file_name]))
 
 #userid just a parameter, no absolute with member in User
 @login_manager.user_loader
@@ -169,10 +171,35 @@ def admin_addproblem():
 
         return redirect('/admin/problemset')
 
-@app.route('/admin/editproblem/<int:pid>/')
+@app.route('/admin/editproblem/<int:pid>/', methods=['GET','POST'])
 @admin_required
 def admin_edit_problem(pid):
-    return render_template('admin_editproblem.html')
+    form = ProblemForm()
+    if request.method == 'GET':
+        problem = Problem.query.get(pid)
+        form = ProblemForm(title = problem.title, description = problem.description, pinput = problem.pinput, poutput = problem.poutput, sinput = problem.sinput, soutput = problem.soutput, hint = problem.hint, time_limit = problem.time_limit, memory_limit = problem.memory_limit)
+
+        return render_template('admin_editproblem.html', form = form, pid = pid)
+    else:
+        delete_data('.'.join([str(pid),'in']))
+        delete_data('.'.join([str(pid),'out']))
+        inputfile = request.files['inputfile']
+        outputfile = request.files['outputfile']
+        inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid),'in'])))
+        outputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid), 'out'])))
+        problem = Problem.query.get(pid)
+        problem.title = form.title.data
+        problem.description = form.description.data
+        problem.pinput = form.pinput.data
+        problem.poutput = form.poutput.data
+        problem.sinput = form.sinput.data
+        problem.soutput = form.soutput.data
+        problem.hint = form.hint.data
+        problem.time_limit = form.time_limit.data
+        problem.memory_limit = form.memory_limit.data
+        db.session.commit()
+
+        return redirect('/admin/problemset')
 
 @app.route('/admin/hideproblem/<int:pid>/')
 @admin_required

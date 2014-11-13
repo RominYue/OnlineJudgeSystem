@@ -1,0 +1,26 @@
+{% extends "admin_base.html" %}
+{% block content %}
+<center><h3> Problem Information </h3></center>
+<form action={{ url_for('admin_edit_problem', pid=pid) }} method="POST" enctype="multipart/form-data">
+    <table id="addproblem">
+        <tr><td id="left"> Title </td><td> {{ form.title(id="ptitle") }}</td></tr>
+        <tr><td id="left"> Time Limit </td><td> {{ form.time_limit(id = "ptitle") }} MS</td></tr>
+        <tr><td id="left"> Memory Limit </td><td> {{ form.memory_limit(id = "ptitle") }} K</td></tr>
+        <tr><td id="left"> Description </td><td> {{ form.description(id="desc") }} </td></tr>
+        <tr><td id="left"> Input </td><td> {{ form.pinput(id="input") }} </td></tr>
+        <tr><td id="left"> Output </td><td> {{ form.poutput(id="output") }} </td></tr>
+        <tr><td id="left"> Sample Input </td><td> {{ form.sinput(id="sinput") }} </td></tr>
+        <tr><td id="left"> Sample Output </td><td> {{ form.soutput(id="soutput") }} </td></tr>
+        <tr><td id="left"> Hint </td><td> {{ form.hint(id="hint") }} </td></tr>
+        <tr><td id="left"> Input File </td><td><input type="file" name="inputfile"></td></tr>
+        <tr><td id="left"> Output File </td><td><input type="file" name="outputfile"></td></tr>
+        <tr>
+            <td></td>
+            <td align="center">
+                <input value="Submit" type="submit">
+                <input value="Reset" type="reset">
+            </td>
+        </tr>
+    </table>
+</form>
+{% endblock %}
