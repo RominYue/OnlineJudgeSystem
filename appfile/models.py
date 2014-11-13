@@ -1,4 +1,5 @@
 from appfile import db
+from config import PING
 
 class User(db.Model):
     #id = db.Column(db.Integer, primary_key = True)
@@ -58,6 +59,30 @@ class Problem(db.Model):
         self.hint = hint
         self.time_limit = time_limit
         self.memory_limit = memory_limit
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+class Submit(db.Model):
+    runid = db.Column(db.Integer, primary_key = True)
+    userid = db.Column(db.String(22))
+    pid = db.Column(db.Integer)
+    result = db.Column(db.String(22), default = PING)
+    memory_used = db.Column(db.Integer, default = None)
+    time_used = db.Column(db.Integer, default = None)
+    language = db.Column(db.String(22))
+    src = db.Column(db.Text)
+    submit_time = db.Column(db.String(22))
+
+    def __init__(self, runid, userid, pid, language, src, submit_time):
+        self.runid = runid
+        self.userid = userid
+        self.pid = pid
+        self.language = language
+        self.src = src
+        self.submit_time = submit_time
 
     def save(self):
         db.session.add(self)

@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import TextField, BooleanField, PasswordField, TextAreaField, IntegerField
+from wtforms import TextField, BooleanField, PasswordField, TextAreaField, IntegerField, StringField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo
 import re
 
@@ -43,3 +43,8 @@ class ProblemForm(Form):
     hint = TextAreaField('Hint', [Length(max = 9999)])
     time_limit = IntegerField('Time Limit',[DataRequired()])
     memory_limit = IntegerField('Memory Limit', [DataRequired()])
+
+class SubmissionForm(Form):
+    pid = IntegerField('Problem ID')
+    language = SelectField('Language',choices = [('C','C'),('C++','C++'),('Python2.7','Python2.7')])
+    src = TextAreaField('Source Code')

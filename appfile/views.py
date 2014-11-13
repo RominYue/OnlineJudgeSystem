@@ -5,11 +5,11 @@ from appfile import app, login_manager, db
 
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from forms import RegisterForm, LoginForm, ProblemForm
+from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm
 from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS
-from models import User, Problem
+from models import User, Problem, Submit
 from functools import wraps
-import os
+import os,time
 
 def admin_required(func):
     @wraps(func)
@@ -23,6 +23,9 @@ def admin_required(func):
 
 def delete_data(file_name):
     os.system('/'.join(['rm problems',file_name]))
+
+def get_now_time():
+    return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
 
 #userid just a parameter, no absolute with member in User
 @login_manager.user_loader
@@ -122,10 +125,24 @@ def show_problem(pid):
     problem = Problem.query.get(pid)
     return render_template('showproblem.html', problem=problem)
 
-@app.route('/submit/pid=<int:pid>/')
-def submit(pid):
-    print url_for('submit', pid = pid)
-    return render_template('submit.html')
+@app.route('/submit/pid=<int:pid>/', methods=['GET','POST'])
+@login_required
+def submit_problem(pid):
+    form = SubmissionForm(pid = pid)
+    if request.method == 'GET':
+        return render_template('submit.html',form = form,pid = pid)
+    else:
+        submit = Submit(runid = Submit.query.count() + 1, userid = current_user.userID,pid = form.pid.data, language = form.language.data, src = form.src.data, submit_time = get_now_time())
+
+        submit.save()
+
+        print "submit successfully"
+
+        return redirect('/status/')
+
+@app.route('/status/')
+def status():
+    return render_template('status.html')
 
 @app.route('/admin/')
 @admin_required

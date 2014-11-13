@@ -19,6 +19,8 @@ PERMISSION_ERROR = "you are not admin!"
 INPUT_ERROR = 'Input Limit Exceeded'
 UPLOAD_SUCESS = 'Uploaded Successfully'
 
+PING = 'pending'
+
 ADMIN_USERID = 'guest'
 ADMIN_NICKNAME = 'guest'
 ADMIN_PASSWORD = '116023'

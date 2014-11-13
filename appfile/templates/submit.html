@@ -1,4 +1,14 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
 {% block content %}
-This is submit page
+<title>Submit Your Solution</title>
+<form action={{ url_for('submit_problem', pid = pid) }} method="POST">
+    <div class="center">
+        <h3 class="blue"> Submit Your Solution </h3>
+        Problem ID: {{ form.pid.data }} <br />
+        Language: {{ form.language }}<br />
+        Source Code<br />
+        {{ form.src(rows = 30, cols = 79) }}<br />
+        <input type="submit" value="Submit" > <input type="reset" value="Reset">
+    </div>
+</form>
 {% endblock %}
