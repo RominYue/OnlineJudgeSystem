@@ -142,7 +142,8 @@ def submit_problem(pid):
 
 @app.route('/status/')
 def status():
-    return render_template('status.html')
+    submit_list = Submit.query.all()
+    return render_template('status.html', submit_list = submit_list)
 
 @app.route('/admin/')
 @admin_required

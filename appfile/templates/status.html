@@ -1,5 +1,43 @@
 {% extends "base.html" %}
 {% block content %}
-This is status page
-............
+<title>Problem Status List</title>
+<center><h3 style="color: blue"> Problem Status List </h3></center>
+<table>
+    <tr>
+        <th> RunID</th>
+        <th> User </th>
+        <th> Problem </th>
+        <th> Result </th>
+        <th> Memory </th>
+        <th> Time </th>
+        <th> Language </th>
+        <th> Code Length </th>
+        <th> Submit Time </th>
+    </tr>
+    {% for submit in submit_list %}
+    <tr style="{{ loop.cycle('','background-color:#D7EBFF') }}">
+        <td> {{ submit.runid }}  </td>
+        <td> {{ submit.uerid }} </td>
+        <td> {{ submit.pid + 1000 }} </td>
+        {% if submit.result == 'Accepted' %}
+            {% set status = "blue" %}
+        {% elif submit.result == 'Pending' or submit.result == 'Runing' or submit.result == 'Compile Error' %}
+            {% set status = "green" %}
+        {% else %}
+            {% set status = "red" %}
+        {% endif%}
+        <td class={{ status }}> {{ submit.result }} </td>
+        {% if submit.result == 'Accepted' %}
+            <td> {{ submit.memory_used }} </td>
+            <td> {{ submit.time_used }} </td>
+        {% else %}
+            <td></td>
+            <td></td>
+        {% endif %}
+        <td> {{ submit.language }} </td>
+        <td></td>
+        <td> {{ submit.submit_time }} </td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}
