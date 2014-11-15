@@ -40,4 +40,13 @@
     </tr>
     {% endfor %}
 </table>
+<div class="center">
+    <a href="/status/"> [First Page] </a>
+    {% if now_page != 1 %}
+    <a href={{ url_for('status', page = now_page - 1) }}> [Previous Page] </a>
+    {% endif %}
+    {% if now_page != page_max %}
+    <a href={{ url_for('status', page = now_page + 1) }}> [Next Page] </a>
+    {% endif %}
+</div>
 {% endblock %}

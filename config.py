@@ -20,7 +20,8 @@ INPUT_ERROR = 'Input Limit Exceeded'
 UPLOAD_SUCESS = 'Uploaded Successfully'
 
 PING = 'Pending'
-
+MAX_PROBLEM_NUM_ONE_PAGE = 3
+MAX_SUBMIT_NUM_ONE_PAGE = 3
 ADMIN_USERID = 'guest'
 ADMIN_NICKNAME = 'guest'
 ADMIN_PASSWORD = '116023'

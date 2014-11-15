@@ -6,7 +6,7 @@ from appfile import app, login_manager, db
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm
-from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS
+from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE
 from models import User, Problem, Submit
 from functools import wraps
 import os,time
@@ -44,10 +44,10 @@ def before_request():
 def index():
     return render_template('index.html')
 
-@app.route('/<userID>/')
+@app.route('/userinfo?userid=<userID>/')
 @login_required
 def userinfo(userID):
-    return render_template('index.html')
+    return render_template('userinfo.html')
 
 @app.route('/login/', methods=['GET','POST'])
 def login():
@@ -109,14 +109,14 @@ def logout():
 def problemset(page = 1):
     problem_count = Problem.query.count()
 
-    Page_Max = problem_count/3
-    if problem_count % 3 != 0:
+    Page_Max = problem_count/MAX_PROBLEM_NUM_ONE_PAGE
+    if problem_count % MAX_PROBLEM_NUM_ONE_PAGE != 0:
         Page_Max += 1
 
-    if page not in range(1,Page_Max + 1):
+    if page not in range(1,Page_Max + 1) and problem_count != 0:
         return 'error page'
 
-    problem_list = Problem.query.filter_by(visable = True).order_by(Problem.pid)[(page - 1) * 3 : min(problem_count, page*3)]
+    problem_list = Problem.query.filter_by(visable = True).order_by(Problem.pid)[(page - 1) * MAX_PROBLEM_NUM_ONE_PAGE : min(problem_count, page*MAX_PROBLEM_NUM_ONE_PAGE)]
 
     return render_template('problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
 
@@ -141,9 +141,18 @@ def submit_problem(pid):
         return redirect('/status/')
 
 @app.route('/status/')
-def status():
-    submit_list = Submit.query.all()
-    return render_template('status.html', submit_list = submit_list)
+@app.route('/status/page=<int:page>')
+def status(page = 1):
+    submit_count = Submit.query.count()
+    Page_Max = submit_count/MAX_SUBMIT_NUM_ONE_PAGE
+    if submit_count % MAX_SUBMIT_NUM_ONE_PAGE != 0:
+        Page_Max += 1
+
+    if page not in range(1,Page_Max + 1) and submit_count != 0:
+        return 'error page'
+
+    submit_list = Submit.query.order_by(Submit.runid)[(page - 1) * MAX_SUBMIT_NUM_ONE_PAGE : min(submit_count,page* MAX_SUBMIT_NUM_ONE_PAGE)]
+    return render_template('status.html', now_page = page, page_max = Page_Max, submit_list = submit_list)
 
 @app.route('/admin/')
 @admin_required
@@ -157,14 +166,14 @@ def admin():
 def admin_problemset(page = 1):
     problem_count = Problem.query.count()
 
-    Page_Max = problem_count/3
-    if problem_count % 3 != 0:
+    Page_Max = problem_count/MAX_PROBLEM_NUM_ONE_PAGE
+    if problem_count % MAX_PROBLEM_NUM_ONE_PAGE != 0:
         Page_Max += 1
 
     if page not in range(1,Page_Max + 1) and problem_count != 0:
         return 'error page'
 
-    problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * 3 : min(problem_count, page*3)]
+    problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * MAX_PROBLEM_NUM_ONE_PAGE : min(problem_count, page*MAX_PROBLEM_NUM_ONE_PAGE)]
 
     return render_template('admin_problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
 
@@ -239,5 +248,6 @@ def admin_display_problem(pid):
 
 @app.route('/viewcode/<int:runid>')
 def viewcode(runid):
-    return render_template('showcode.html')
+    submit = Submit.query.get(runid)
+    return render_template('showcode.html',submit = submit)
 
