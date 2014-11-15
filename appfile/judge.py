@@ -21,6 +21,7 @@ def work(que):
         task = que.get()
         runid = task['runid']
         pid = task['pid']
+        #result = judge()
         result = 'Accepted'
         submit = Submit.query.get(pid)
         submit.result =  result

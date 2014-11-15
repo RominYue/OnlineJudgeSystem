@@ -2,7 +2,7 @@
 {% block content %}
 <title>Problem Status List</title>
 <center><h3 style="color: blue"> Problem Status List </h3></center>
-<table>
+<table id="list">
     <tr>
         <th> RunID</th>
         <th> User </th>
@@ -28,13 +28,13 @@
         {% endif%}
         <td class={{ status }}> {{ submit.result }} </td>
         {% if submit.result == 'Accepted' %}
-            <td> {{ submit.memory_used }} </td>
-            <td> {{ submit.time_used }} </td>
+            <td> {{ submit.memory_used }} K </td>
+            <td> {{ submit.time_used }} MS </td>
         {% else %}
             <td></td>
             <td></td>
         {% endif %}
-        <td> {{ submit.language }} </td>
+        <td><a href={{ url_for('viewcode', runid = submit.runid) }}> {{ submit.language }} </a></td>
         <td></td>
         <td> {{ submit.submit_time }} </td>
     </tr>

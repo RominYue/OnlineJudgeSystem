@@ -237,3 +237,7 @@ def admin_display_problem(pid):
     db.session.commit()
     return redirect('/admin/problemset')
 
+@app.route('/viewcode/<int:runid>')
+def viewcode(runid):
+    return render_template('showcode.html')
+
