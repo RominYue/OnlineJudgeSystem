@@ -4,6 +4,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'tmp.db')
 UPLOAD_FOLDER = 'appfile/problems'
+TMP_FOLDER = 'appfile/tmpfile'
+WAIT_TIME = 0.5
+
 
 CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
@@ -25,3 +28,18 @@ MAX_SUBMIT_NUM_ONE_PAGE = 3
 ADMIN_USERID = 'guest'
 ADMIN_NICKNAME = 'guest'
 ADMIN_PASSWORD = '116023'
+
+PYTHON_TIME_LIMIT_TIMES = 10
+PYTHON_MEMORY_LIMIT_TIMES = 10
+
+JUDGE_RESULT = {
+    0: 'Accepted',
+    1: 'Presentation Error',
+    2: 'Time Limit Exceeded',
+    3: 'Memory Limit Exceeded',
+    4: 'Wrong Answer',
+    5: 'Runtime Error',
+    6: 'Output Limit Exceeded',
+    7: 'Compile Error',
+    8: 'System Error'
+}
