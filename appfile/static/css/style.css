@@ -1,12 +1,13 @@
-#wrapper {
-    position: absolute;
-    width: 95%;
-    left: 2.5%;
-}
+ #wrapper {
+     position: relative;
+     width: 1222px;
+     min-height: 100%;
+     margin: 0 auto;
+ }
 
 #wrapper2 {
     position: relative;
-    width: 1000px;
+    width: 1111px;
     top: 20px;
     margin: 0 auto;
 }
@@ -26,7 +27,8 @@
 }
 
 #navbar {
-    width: 1000px;
+    color: white;
+    width: 1111px;
     background-color: #AFEEEE;
     margin: 0 auto;
     border-collapse: collapse;
@@ -212,10 +214,10 @@ a:hover {
 }
 
 #list {
-    width: 1000px;
+    width: 1111px;
     border-collapse: collapse;
     margin: 0 auto;
-    font-size: 15px;
+    font-size: 16px;
     text-align: center;
 }
 

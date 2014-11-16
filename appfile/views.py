@@ -283,4 +283,8 @@ def show_ranklist(start = 1):
     user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userID)[start - 1: end - 1]
     return render_template('ranklist.html', start = start, end = end, user_list = user_list)
 
+@app.route('/webboard/')
+def web_board():
+    return render_template('webboard.html')
+
 
