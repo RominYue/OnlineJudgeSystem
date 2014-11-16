@@ -1,4 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-<title> User--{{g.user.userID}} </title>
+<title> User--{{ user.userID }} </title>
+<div id="wrapper2" class="center">
+    <h4 class="green"> {{ user.nickname }} </h4>
+    <table class="center" style="background-color:#D7EBFF">
+        <tr><td class="left" style="width:200px"> Rank </td><td style="width:50px"> {{ rank }} </td></tr>
+        <tr><td class="left"> Submissions </td><td> {{ user.submit_count }} </td></tr>
+        <tr><td class="left"> Problems Solved </td><td> {{ user.ac_count }} </td></tr>
+    </table>
+    <p class="center" style="width:600px">
+        {% for problem in solved_problem_list %}
+            <a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.pid }} </a>
+        {% endfor %}
+    </p>
+</div>
 {% endblock %}

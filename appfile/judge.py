@@ -7,8 +7,13 @@ import subprocess, shlex
 import lorun
 
 from appfile import db
-from models import Submit, Problem
+from models import Submit, Problem, User
 from config import  UPLOAD_FOLDER, TMP_FOLDER, JUDGE_RESULT, PYTHON_TIME_LIMIT_TIMES, PYTHON_MEMORY_LIMIT_TIMES
+
+
+def rm_tmp_file(runid):
+    os.system(' '.join(['rm', os.path.join(TMP_FOLDER, str(runid))]))
+
 
 def put_task_into_queue(que):
     submit_list = Submit.query.filter_by(result = 'Pending').order_by(Submit.runid).all()
@@ -17,7 +22,8 @@ def put_task_into_queue(que):
         task = {
             'runid':submit.runid,
             'pid':submit.pid,
-            'language': submit.language
+            'language': submit.language,
+            'userid': submit.userid
         }
 
         que.put(task)
@@ -29,14 +35,29 @@ def work(que):
         runid = task['runid']
         pid = task['pid']
         language = task['language']
+        userid = task['userid']
+
         result, rst = judge(runid,pid,language)
+
+        problem = Problem.query.get(pid)
+        user = User.query.get(userid)
+
         if result == 'Accepted':
+
+            if not Submit.query.filter_by(pid = pid, userid = userid, result = 'Accepted').all():
+                user.ac_count += 1
+
+            problem.ac_count += 1
             db.session.query(Submit).filter_by(runid = runid).update({'result': result,'time_used': rst['timeused'], 'memory_used': rst['memoryused']})
         else:
             Submit.query.filter_by(runid = runid).update({'result':result})
+
+        problem.submit_count += 1
+        user.submit_count += 1
         db.session.commit()
 
         que.task_done()
+        rm_tmp_file(runid)
 
 
 def get_code(runid, file_name):

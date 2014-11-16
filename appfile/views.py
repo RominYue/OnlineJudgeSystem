@@ -45,9 +45,13 @@ def index():
     return render_template('index.html')
 
 @app.route('/userinfo?userid=<userID>/')
-@login_required
 def userinfo(userID):
-    return render_template('userinfo.html')
+    user = User.query.get(userID)
+    solved_problem_list = Submit.query.filter_by(userid = userID, result = 'Accepted').order_by(Submit.pid).distinct(Submit.pid).all()
+    user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userID).all()
+    rank  = user_list.index(user) + 1
+
+    return render_template('userinfo.html', user = user, rank = rank, solved_problem_list = solved_problem_list)
 
 @app.route('/login/', methods=['GET','POST'])
 def login():
