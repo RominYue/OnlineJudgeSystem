@@ -5,7 +5,7 @@ from appfile import app, login_manager, db
 
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm
+from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm
 from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE
 from models import User, Problem, Submit
 from functools import wraps
@@ -107,6 +107,7 @@ def logout():
 @app.route('/problemset/')
 @app.route('/problemset/page=<int:page>/')
 def problemset(page = 1):
+    form = SearchProblemForm()
     problem_count = Problem.query.count()
 
     Page_Max = problem_count/MAX_PROBLEM_NUM_ONE_PAGE
@@ -118,12 +119,20 @@ def problemset(page = 1):
 
     problem_list = Problem.query.filter_by(visable = True).order_by(Problem.pid)[(page - 1) * MAX_PROBLEM_NUM_ONE_PAGE : min(problem_count, page*MAX_PROBLEM_NUM_ONE_PAGE)]
 
-    return render_template('problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
+    return render_template('problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list, form = form)
 
 @app.route('/showproblem/pid=<int:pid>/')
 def show_problem(pid):
     problem = Problem.query.get(pid)
     return render_template('showproblem.html', problem=problem)
+
+@app.route('/searchproblem/', methods =['POST'])
+def search_problem():
+    form = SearchProblemForm()
+    if form.pid.data is None:
+        return redirect('/problemset/')
+    else:
+        return redirect(url_for('show_problem', pid = (form.pid.data - 1000)))
 
 @app.route('/submit/pid=<int:pid>/', methods=['GET','POST'])
 @login_required

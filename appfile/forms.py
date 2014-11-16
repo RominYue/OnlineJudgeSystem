@@ -48,3 +48,6 @@ class SubmissionForm(Form):
     pid = IntegerField('Problem ID')
     language = SelectField('Language',choices = [('C','C'),('C++','C++'),('Python2.7','Python2.7')])
     src = TextAreaField('Source Code')
+
+class SearchProblemForm(Form):
+    pid = IntegerField('Problem ID')

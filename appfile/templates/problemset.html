@@ -9,7 +9,16 @@
         {% endif %}
     {% endfor %}
 </center>
-
+<form action={{ url_for('search_problem') }} method="POST">
+    {{ form.csrf_token }}
+    <table class="center">
+        <tr>
+            <td> Problem ID : </td>
+            <td> {{ form.pid(size=7) }} </td>
+            <td><button type="submit"> Go </button></td>
+        </tr>
+    </table>
+</form>
 <table id = "problemset">
     <tr>
         <th id="ps_is_ac"></th>
