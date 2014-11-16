@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<title> Ranklist </title>
+<center><h3>Ranklist</h3></center>
+<table id="list">
+    <tr>
+        <th id="ps_is_ac"> No. </th>
+        <th id="ps_pid"> User ID </th>
+        <th id="ps_title" style="text-align:center"> NickName </th>
+        <th id="ps_ac"> AC </th>
+        <th id="ps_submit"> Submit </th>
+    </tr>
+    {% for i in range(start, end) %}
+        <tr style="{{ loop.cycle('', 'background-color:#D7EBFF') }}">
+            <td> {{ i }} </td>
+            <td><a href={{ url_for('userinfo', userID = user_list[i - 1].userID) }}> {{ user_list[i - 1].userID }} </a></td>
+            <td> {{ user_list[i - 1].nickname }} </td>
+            <td> {{ user_list[i - 1].ac_count }} </td>
+            <td> {{ user_list[i - 1].submit_count }} </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

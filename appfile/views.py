@@ -6,7 +6,7 @@ from appfile import app, login_manager, db
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm, SearchSubmitForm
-from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE
+from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE, USER_NUM_ONE_PAGE
 from models import User, Problem, Submit
 from functools import wraps
 import os,time
@@ -139,7 +139,6 @@ def search_submit():
     pass
 
 
-
 @app.route('/submit/pid=<int:pid>/', methods=['GET','POST'])
 @login_required
 def submit_problem(pid):
@@ -267,5 +266,17 @@ def viewcode(runid):
 @app.route('/FAQ/')
 def show_faq():
     return render_template('FAQ.html')
+
+@app.route('/ranklist/')
+@app.route('/ranklist/<int:start>')
+def show_ranklist(start = 1):
+    user_count = User.query.count()
+
+    if start > user_count:
+        return "error start"
+
+    end = min(user_count, start + USER_NUM_ONE_PAGE - 1) + 1
+    user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userID)[start - 1: end - 1]
+    return render_template('ranklist.html', start = start, end = end, user_list = user_list)
 
 

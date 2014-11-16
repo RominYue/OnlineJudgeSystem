@@ -7,6 +7,8 @@ class User(db.Model):
     nickname = db.Column(db.String(22),unique = True)
     password = db.Column(db.String(100), index = True, unique = True)
     is_admin = db.Column(db.Boolean)
+    ac_count = db.Column(db.Integer, default = 0)
+    submit_count = db.Column(db.Integer, default = 0)
 
     def __init__(self, userID, nickname, password, is_admin = False):
         self.userID = userID
