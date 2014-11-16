@@ -5,7 +5,7 @@ from appfile import app, login_manager, db
 
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm
+from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm, SearchSubmitForm
 from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE
 from models import User, Problem, Submit
 from functools import wraps
@@ -134,6 +134,12 @@ def search_problem():
     else:
         return redirect(url_for('show_problem', pid = (form.pid.data - 1000)))
 
+@app.route('/searchsubmit/', methods = ['POST'])
+def search_submit():
+    pass
+
+
+
 @app.route('/submit/pid=<int:pid>/', methods=['GET','POST'])
 @login_required
 def submit_problem(pid):
@@ -152,6 +158,8 @@ def submit_problem(pid):
 @app.route('/status/')
 @app.route('/status/page=<int:page>')
 def status(page = 1):
+    form = SearchSubmitForm()
+
     submit_count = Submit.query.count()
     Page_Max = submit_count/MAX_SUBMIT_NUM_ONE_PAGE
     if submit_count % MAX_SUBMIT_NUM_ONE_PAGE != 0:
@@ -161,7 +169,7 @@ def status(page = 1):
         return 'error page'
 
     submit_list = Submit.query.order_by(Submit.runid.desc())[(page - 1) * MAX_SUBMIT_NUM_ONE_PAGE : min(submit_count,page* MAX_SUBMIT_NUM_ONE_PAGE)]
-    return render_template('status.html', now_page = page, page_max = Page_Max, submit_list = submit_list)
+    return render_template('status.html', now_page = page, page_max = Page_Max, submit_list = submit_list, form = form)
 
 @app.route('/showcompileinfo/<int:runid>')
 def show_compile_info(runid):

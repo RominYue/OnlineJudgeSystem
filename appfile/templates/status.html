@@ -2,6 +2,28 @@
 {% block content %}
 <title>Problem Status List</title>
 <center><h3 style="color: blue"> Problem Status List </h3></center>
+<form action={{ url_for('search_submit') }} method="POST">
+    {{ form.csrf_token }}
+    <table class="center">
+        <tr>
+            <td> Problem ID : </td>
+            <td> {{ form.pid(size=7) }} </td>
+            <td></td>
+
+            <td> User : </td>
+            <td> {{ form.userid(size=10) }} </td>
+            <td></td>
+
+            <td> Language : </td>
+            <td> {{ form.language }} </td>
+            <td></td>
+
+            <td> Result : </td>
+            <td> {{ form.result }} </td>
+            <td><button type="submit"> Search </button></td>
+        </tr>
+    </table>
+</form>
 <table id="list">
     <tr>
         <th> RunID</th>
