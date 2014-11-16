@@ -3,10 +3,11 @@
 
 import os
 import os.path
-import subprocess, shelx
+import subprocess, shlex
+import lorun
 
-from app import db
-from models import Submit
+from appfile import db
+from models import Submit, Problem
 from config import  UPLOAD_FOLDER, TMP_FOLDER, JUDGE_RESULT, PYTHON_TIME_LIMIT_TIMES, PYTHON_MEMORY_LIMIT_TIMES
 
 def put_task_into_queue(que):
@@ -70,9 +71,9 @@ def judge(runid, pid, language):
     #form the src into main.py/main.c
     get_code(runid, filename[language])
 
-    input_file = file(os.path.join(UPLOAD_FOLDER, ''.join([str(pid), '.in'])))
-    output_file = file(os.path.join(UPLOAD_FOLDER, ''.join([str(pid), '.out'])))
-    tmp_file = file(os.path.join(TMP_FOLDER, str(runid)), 'w')
+    input_file = open(os.path.join(UPLOAD_FOLDER, ''.join([str(pid), '.in'])))
+    output_file = open(os.path.join(UPLOAD_FOLDER, ''.join([str(pid), '.out'])))
+    tmp_file = open(os.path.join(TMP_FOLDER, str(runid)), 'w')
     time_limit = Problem.query.get(pid).time_limit
     memory_limit = Problem.query.get(pid).memory_limit
 
@@ -95,8 +96,24 @@ def judge(runid, pid, language):
         'timelimit': time_limit,
         'memorylimit': memory_limit
     }
+    #lorun.run() returns a dict = {'memoryused': kb, 'timeused': ms, 'results': '0 if run properly'}
+    #otherwise non-zero maybe Runtime Error
     rst = lorun.run(runcfg)
-    tmp_file = file(os.path.join(TMP_FOLDER, str(runid)))
-    return JUDGE_RESULT[lorun.check(output_file.fileno(), tmp_file.fileno())], rst
+    print rst
+    input_file.close()
+    tmp_file.close()
+
+    tmp_file = open(os.path.join(TMP_FOLDER, str(runid)))
+
+    if rst['result'] == 0:
+        #lorun.check() returns a number which means the final result
+        crst = lorun.check(output_file.fileno(), tmp_file.fileno())
+        output_file.close()
+        tmp_file.close()
+        rst['result'] = crst
+
+        print crst
+
+    return JUDGE_RESULT[rst['result']], rst
 
 

@@ -1,10 +1,12 @@
-import os.path
+import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'tmp.db')
-UPLOAD_FOLDER = 'appfile/problems'
-TMP_FOLDER = 'appfile/tmpfile'
+
+MAIN_PATH = os.getcwd()
+UPLOAD_FOLDER = os.path.join(MAIN_PATH,'appfile/problems')
+TMP_FOLDER = os.path.join(MAIN_PATH, 'appfile/tmpfile')
 WAIT_TIME = 0.5
 
 
