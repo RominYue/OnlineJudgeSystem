@@ -26,7 +26,13 @@
         {% else %}
             {% set status = "red" %}
         {% endif%}
-        <td class={{ status }}> {{ submit.result }} </td>
+        <td class={{ status }}>
+            {% if submit.result == 'Compile Error' %}
+                <a href={{ url_for('show_compile_info', runid = submit.runid) }}>{{ submit.result }}</a>
+            {% else %}
+                {{ submit.result }}
+            {% endif %}
+        </td>
         {% if submit.result == 'Accepted' %}
             <td> {{ submit.memory_used }} K </td>
             <td> {{ submit.time_used }} MS </td>
@@ -35,7 +41,7 @@
             <td></td>
         {% endif %}
         <td><a href={{ url_for('viewcode', runid = submit.runid) }}> {{ submit.language }} </a></td>
-        <td></td>
+        <td> {{ submit.length }}</td>
         <td> {{ submit.submit_time }} </td>
     </tr>
     {% endfor %}

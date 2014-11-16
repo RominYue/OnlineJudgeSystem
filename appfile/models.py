@@ -34,6 +34,7 @@ class User(db.Model):
         db.session.commit()
 
 
+
 class Problem(db.Model):
     pid = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(299))
@@ -69,12 +70,14 @@ class Submit(db.Model):
     runid = db.Column(db.Integer, primary_key = True)
     userid = db.Column(db.String(22))
     pid = db.Column(db.Integer)
-    result = db.Column(db.String(22), default = PING)
+    result = db.Column(db.String(22), default = 'Pending')
     memory_used = db.Column(db.Integer, default = None)
     time_used = db.Column(db.Integer, default = None)
     language = db.Column(db.String(22))
     src = db.Column(db.Text)
+    length = db.Column(db.Integer)
     submit_time = db.Column(db.String(22))
+    ce_error = db.Column(db.Text, default = None)
 
     def __init__(self, runid, userid, pid, language, src, submit_time):
         self.runid = runid
@@ -82,6 +85,7 @@ class Submit(db.Model):
         self.pid = pid
         self.language = language
         self.src = src
+        self.length = len(src)
         self.submit_time = submit_time
 
     def save(self):

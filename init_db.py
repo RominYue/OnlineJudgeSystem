@@ -2,11 +2,13 @@ import os
 
 from appfile import db
 from appfile.models import User
-from config import ADMIN_USERID, ADMIN_NICKNAME, ADMIN_PASSWORD
+from config import ADMIN_USERID, ADMIN_NICKNAME, ADMIN_PASSWORD, UPLOAD_FOLDER, TMP_FOLDER
 
 #make problem directory
-os.system('rm -rf appfile/problems')
-os.mkdir('appfile/problems')
+os.system(' '.join(['rm -rf', UPLOAD_FOLDER]))
+os.system(' '.join(['rm -rf', TMP_FOLDER]))
+os.mkdir(UPLOAD_FOLDER)
+os.mkdir(TMP_FOLDER)
 
 #init db
 db.drop_all()

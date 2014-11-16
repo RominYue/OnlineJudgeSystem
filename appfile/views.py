@@ -151,8 +151,13 @@ def status(page = 1):
     if page not in range(1,Page_Max + 1) and submit_count != 0:
         return 'error page'
 
-    submit_list = Submit.query.order_by(Submit.runid)[(page - 1) * MAX_SUBMIT_NUM_ONE_PAGE : min(submit_count,page* MAX_SUBMIT_NUM_ONE_PAGE)]
+    submit_list = Submit.query.order_by(Submit.runid.desc())[(page - 1) * MAX_SUBMIT_NUM_ONE_PAGE : min(submit_count,page* MAX_SUBMIT_NUM_ONE_PAGE)]
     return render_template('status.html', now_page = page, page_max = Page_Max, submit_list = submit_list)
+
+@app.route('/showcompileinfo/<int:runid>')
+def show_compile_info(runid):
+        submit = Submit.query.get(runid)
+        return render_template('ce_error.html', ce_error = submit.ce_error)
 
 @app.route('/admin/')
 @admin_required
@@ -214,16 +219,7 @@ def admin_edit_problem(pid):
         outputfile = request.files['outputfile']
         inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid),'in'])))
         outputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid), 'out'])))
-        problem = Problem.query.get(pid)
-        problem.title = form.title.data
-        problem.description = form.description.data
-        problem.pinput = form.pinput.data
-        problem.poutput = form.poutput.data
-        problem.sinput = form.sinput.data
-        problem.soutput = form.soutput.data
-        problem.hint = form.hint.data
-        problem.time_limit = form.time_limit.data
-        problem.memory_limit = form.memory_limit.data
+        Problem.query.filter_by(pid = pid).update({'title': form.title.data, 'description': form.description.data, 'pinput': form.pinput.data, 'poutput': form.poutput.data, 'sinput': form.sinput.data, 'soutput': form.soutput.data, 'hint': form.hint.data, 'time_limit': form.time_limit.data, 'memory_limit': form.memory_limit.data})
         db.session.commit()
 
         return redirect('/admin/problemset')
