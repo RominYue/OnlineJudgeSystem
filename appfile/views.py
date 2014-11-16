@@ -247,3 +247,8 @@ def viewcode(runid):
     submit = Submit.query.get(runid)
     return render_template('showcode.html',submit = submit)
 
+@app.route('/FAQ/')
+def show_faq():
+    return render_template('FAQ.html')
+
+
