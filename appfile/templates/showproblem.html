@@ -53,7 +53,7 @@
 </div>
 <center>
     <a href={{ url_for('submit_problem', pid = problem.pid) }}> Submit </a>
-    Status
+    <a href={{ url_for('problemstatus', pid = problem.pid) }}> Status </a>
     Discuss
 </center>
 {% endblock %}

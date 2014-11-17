@@ -130,9 +130,20 @@ def search_problem():
     else:
         return redirect(url_for('show_problem', pid = (form.pid.data - 1000)))
 
-@app.route('/searchsubmit/', methods = ['POST'])
-def search_submit():
-    pass
+
+@app.route('/problemstatus/')
+def problemstatus():
+
+    pid = request.args.get('pid')
+    page = request.args.get('page')
+
+    if not page:
+        page = 1
+
+
+    solution_list = Submit.query.filter_by(pid = pid, result = 'Accepted').order_by(Submit.time_used, Submit.memory_used).group_by(Submit.userid).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
+
+    return render_template('problemstatus.html', pid = pid, page = page, solution_list = solution_list, MAX_SUBMIT_NUM_ONE_PAGE = MAX_SUBMIT_NUM_ONE_PAGE)
 
 
 @app.route('/submit/pid=<int:pid>/', methods=['GET','POST'])
@@ -150,12 +161,27 @@ def submit_problem(pid):
 
         return redirect('/status/')
 
-@app.route('/status/')
+@app.route('/status/', methods = ['GET','POST'])
 @app.route('/status/page=<int:page>')
 def status(page = 1):
     form = SearchSubmitForm()
 
-    submit_list = Submit.query.order_by(Submit.runid.desc()).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
+    if request.method == 'POST':
+
+        subq = Submit.query
+
+        if form.pid.data:
+            subq = subq.filter_by(pid = form.pid.data)
+        if form.userid.data:
+            subq = subq.filter_by(userid = form.userid.data)
+        if form.language.data and form.language.data != 'All':
+            subq = subq.filter_by(language = form.language.data)
+        if form.result.data and form.result.data != 'All':
+            subq = subq.filter_by(result = form.result.data)
+
+        submit_list = subq.paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
+    else:
+        submit_list = Submit.query.order_by(Submit.runid.desc()).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
     return render_template('status.html', submit_list = submit_list, form = form)
 
 @app.route('/showcompileinfo/<int:runid>')
@@ -238,8 +264,9 @@ def admin_display_problem(pid):
     db.session.commit()
     return redirect('/admin/problemset')
 
-@app.route('/viewcode/<int:runid>')
-def viewcode(runid):
+@app.route('/viewcode/')
+def viewcode():
+    runid = request.args.get('runid')
     submit = Submit.query.get(runid)
     return render_template('showcode.html',submit = submit)
 

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<title> {{ pid }}'s Status List </title>
+<div id="wrapper2">
+    <h2 class="center blue"> Best solutions of Problem {{ pid }} </h2>
+    <table class="center">
+        <tr style="background-color: #1A5CC8; color:white; height:39px">
+            <th width="39px"> Rank </th>
+            <th width="139px"> User </th>
+            <th width="70px"> Memory </th>
+            <th width="70px"> Time </th>
+            <th> Language </th>
+            <th> Code Length </th>
+            <th width="170px"> Submit Time </th>
+        </tr>
+        {% for solution in solution_list.items %}
+        <tr style="{{ loop.cycle('', 'background-color:#D7EBFF') }}">
+            <td> {{ MAX_SUBMIT_NUM_ONE_PAGE * (page - 1) + solution_list.items.index(solution) + 1 }} </td>
+            <td><a href={{ url_for('userinfo', userID = solution.userid) }} target="_blank"> {{ solution.userid }} </a></td>
+            <td> {{ solution.memory_used }} K </td>
+            <td> {{ solution.time_used }} MS </td>
+            <td><a href={{ url_for('viewcode', runid = solution.runid) }} target="_blank"> {{ solution.language }} </a></td>
+            <td> {{ solution.length }} </td>
+            <td> {{ solution.submit_time }} </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="center">
+    [<a href={{ url_for('problemstatus', pid = pid) }}> Top </a>]
+    {% if solution_list.has_prev %}
+        [<a href={{ url_for('problemstatus', pid = pid, page = solution_list.pre_num) }}> Previous Page </a>]
+    {% endif %}
+    {% if solution_list.has_next %}
+        [<a href={{ url_for('problemstatus', pid = pid, page = solution_list.next_num) }}> Next Page </a>]
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

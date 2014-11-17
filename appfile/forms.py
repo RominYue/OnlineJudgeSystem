@@ -56,7 +56,8 @@ class SearchSubmitForm(Form):
     pid = IntegerField('Problem ID')
     userid = TextField('UserID')
     language = SelectField(choices = [('All','All'), ('C++', 'C++'), ('C', 'C'), ('Python2.7', 'Python2.7')])
-    result = SelectField(choices = [ ('Accepted', 'Accepted'), \
+    result = SelectField(choices = [ ('All','All'), \
+                                     ('Accepted', 'Accepted'), \
                                      ('Presentation Error', 'Presentation Error'), \
                                      ('Time Limit Exceeded', 'Time Limit Exceeded'), \
                                      ('Memory Limit Exceeded', 'Memory Limit Exceeded'), \
