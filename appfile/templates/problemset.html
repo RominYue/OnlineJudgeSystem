@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <center>
-    {% for i in range(1, Page_Max + 1) %}
+    {% for i in problem_list.iter_pages() %}
         {% if i == page %}
             {{ i }}
         {% else %}
-            <a href="/problemset/page={{ i }}"> {{ i }} </a>
+            <a href={{ url_for('problemset', page = i) }}> {{ i }} </a>
         {% endif %}
     {% endfor %}
 </center>
@@ -27,7 +27,7 @@
         <th id="ps_ac"> AC Rate </th>
         <th id="ps_submit"> Submit </th>
     </tr>
-    {% for problem in problem_list %}
+    {% for problem in problem_list.items %}
             <tr style={{ loop.cycle('',"background-color:#D7EBFF") }}>
                 <td></td>
                 <td> {{ problem.pid + 1000 }} </td>

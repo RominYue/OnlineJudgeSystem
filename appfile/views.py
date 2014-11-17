@@ -112,18 +112,10 @@ def logout():
 @app.route('/problemset/page=<int:page>/')
 def problemset(page = 1):
     form = SearchProblemForm()
-    problem_count = Problem.query.count()
 
-    Page_Max = problem_count/MAX_PROBLEM_NUM_ONE_PAGE
-    if problem_count % MAX_PROBLEM_NUM_ONE_PAGE != 0:
-        Page_Max += 1
+    problem_list = Problem.query.filter_by(visable = True).order_by(Problem.pid).paginate(page,MAX_PROBLEM_NUM_ONE_PAGE, False )
 
-    if page not in range(1,Page_Max + 1) and problem_count != 0:
-        return 'error page'
-
-    problem_list = Problem.query.filter_by(visable = True).order_by(Problem.pid)[(page - 1) * MAX_PROBLEM_NUM_ONE_PAGE : min(problem_count, page*MAX_PROBLEM_NUM_ONE_PAGE)]
-
-    return render_template('problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list, form = form)
+    return render_template('problemset.html', page=page, problem_list = problem_list, form = form)
 
 @app.route('/showproblem/pid=<int:pid>/')
 def show_problem(pid):
@@ -163,16 +155,8 @@ def submit_problem(pid):
 def status(page = 1):
     form = SearchSubmitForm()
 
-    submit_count = Submit.query.count()
-    Page_Max = submit_count/MAX_SUBMIT_NUM_ONE_PAGE
-    if submit_count % MAX_SUBMIT_NUM_ONE_PAGE != 0:
-        Page_Max += 1
-
-    if page not in range(1,Page_Max + 1) and submit_count != 0:
-        return 'error page'
-
-    submit_list = Submit.query.order_by(Submit.runid.desc())[(page - 1) * MAX_SUBMIT_NUM_ONE_PAGE : min(submit_count,page* MAX_SUBMIT_NUM_ONE_PAGE)]
-    return render_template('status.html', now_page = page, page_max = Page_Max, submit_list = submit_list, form = form)
+    submit_list = Submit.query.order_by(Submit.runid.desc()).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
+    return render_template('status.html', submit_list = submit_list, form = form)
 
 @app.route('/showcompileinfo/<int:runid>')
 def show_compile_info(runid):
@@ -189,18 +173,10 @@ def admin():
 @app.route('/admin/problemset/page=<int:page>')
 @admin_required
 def admin_problemset(page = 1):
-    problem_count = Problem.query.count()
 
-    Page_Max = problem_count/MAX_PROBLEM_NUM_ONE_PAGE
-    if problem_count % MAX_PROBLEM_NUM_ONE_PAGE != 0:
-        Page_Max += 1
+    problem_list = Problem.query.order_by(Problem.pid).paginate(page, MAX_PROBLEM_NUM_ONE_PAGE, False)
 
-    if page not in range(1,Page_Max + 1) and problem_count != 0:
-        return 'error page'
-
-    problem_list = Problem.query.order_by(Problem.pid)[(page - 1) * MAX_PROBLEM_NUM_ONE_PAGE : min(problem_count, page*MAX_PROBLEM_NUM_ONE_PAGE)]
-
-    return render_template('admin_problemset.html', page=page, Page_Max = Page_Max, problem_list = problem_list)
+    return render_template('admin_problemset.html', page = page, problem_list = problem_list)
 
 @app.route('/admin/problemset/addproblem/', methods=['GET','POST'])
 @admin_required
@@ -272,16 +248,12 @@ def show_faq():
     return render_template('FAQ.html')
 
 @app.route('/ranklist/')
-@app.route('/ranklist/<int:start>')
-def show_ranklist(start = 1):
-    user_count = User.query.count()
+@app.route('/ranklist/<int:page>/')
+def show_ranklist(page = 1):
 
-    if start > user_count:
-        return "error start"
+    user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userID).paginate(page,USER_NUM_ONE_PAGE, False)
 
-    end = min(user_count, start + USER_NUM_ONE_PAGE - 1) + 1
-    user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userID)[start - 1: end - 1]
-    return render_template('ranklist.html', start = start, end = end, user_list = user_list)
+    return render_template('ranklist.html', user_list = user_list, page = page, USER_NUM_ONE_PAGE =USER_NUM_ONE_PAGE )
 
 @app.route('/webboard/')
 def web_board():

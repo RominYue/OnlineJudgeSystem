@@ -10,14 +10,22 @@
         <th id="ps_ac"> AC </th>
         <th id="ps_submit"> Submit </th>
     </tr>
-    {% for i in range(start, end) %}
+    {% for user in user_list.items %}
         <tr style="{{ loop.cycle('', 'background-color:#D7EBFF') }}">
-            <td> {{ i }} </td>
-            <td><a href={{ url_for('userinfo', userID = user_list[i - 1].userID) }}> {{ user_list[i - 1].userID }} </a></td>
-            <td> {{ user_list[i - 1].nickname }} </td>
-            <td> {{ user_list[i - 1].ac_count }} </td>
-            <td> {{ user_list[i - 1].submit_count }} </td>
+            <td> {{ USER_NUM_ONE_PAGE * (page - 1) + user_list.items.index(user) + 1 }} </td>
+            <td><a href={{ url_for('userinfo', userID = user.userID) }}> {{ user.userID }} </a></td>
+            <td> {{ user.nickname }} </td>
+            <td> {{ user.ac_count }} </td>
+            <td> {{ user.submit_count }} </td>
         </tr>
     {% endfor %}
 </table>
+<div class="center">
+{% if user_list.has_prev %}
+    <a href={{ url_for('show_ranklist', page = user_list.prev_num) }}> [Previous Page]</a>
+{% endif %}
+{% if user_list.has_next %}
+    <a href={{ url_for('show_ranklist', page = user_list.next_num) }}> [Next Page] </a>
+{% endif %}
+</div>
 {% endblock %}

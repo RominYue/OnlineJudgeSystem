@@ -2,6 +2,7 @@
 {% block content %}
 <title>Problem Status List</title>
 <center><h3 style="color: blue"> Problem Status List </h3></center>
+<div style="width:1111px" class="center">
 <form action={{ url_for('search_submit') }} method="POST">
     {{ form.csrf_token }}
     <table class="center">
@@ -24,6 +25,7 @@
         </tr>
     </table>
 </form>
+</div>
 <table id="list">
     <tr>
         <th> RunID</th>
@@ -36,7 +38,7 @@
         <th> Code Length </th>
         <th> Submit Time </th>
     </tr>
-    {% for submit in submit_list %}
+    {% for submit in submit_list.items %}
     <tr style="{{ loop.cycle('','background-color:#D7EBFF') }}">
         <td> {{ submit.runid }}  </td>
         <td> <a href={{ url_for('userinfo',userID = submit.userid) }}>{{ submit.userid }}</a> </td>
@@ -50,7 +52,7 @@
         {% endif%}
         <td class={{ status }}>
             {% if submit.result == 'Compile Error' %}
-                <a href={{ url_for('show_compile_info', runid = submit.runid) }}>{{ submit.result }}</a>
+                <a target="_blank" href={{ url_for('show_compile_info', runid = submit.runid) }}>{{ submit.result }}</a>
             {% else %}
                 {{ submit.result }}
             {% endif %}
@@ -62,7 +64,7 @@
             <td></td>
             <td></td>
         {% endif %}
-        <td><a href={{ url_for('viewcode', runid = submit.runid) }}> {{ submit.language }} </a></td>
+        <td><a target="_blank" href={{ url_for('viewcode', runid = submit.runid) }}> {{ submit.language }} </a></td>
         <td> {{ submit.length }}</td>
         <td> {{ submit.submit_time }} </td>
     </tr>
@@ -70,11 +72,11 @@
 </table>
 <div class="center">
     <a href="/status/"> [First Page] </a>
-    {% if now_page != 1 %}
-    <a href={{ url_for('status', page = now_page - 1) }}> [Previous Page] </a>
+    {% if submit_list.has_prev %}
+    <a href={{ url_for('status', page = submit_list.prev_num) }}> [Previous Page] </a>
     {% endif %}
-    {% if now_page != page_max %}
-    <a href={{ url_for('status', page = now_page + 1) }}> [Next Page] </a>
+    {% if submit_list.has_next %}
+    <a href={{ url_for('status', page = submit_list.next_num) }}> [Next Page] </a>
     {% endif %}
 </div>
 {% endblock %}
