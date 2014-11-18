@@ -95,3 +95,40 @@ class Submit(db.Model):
         db.session.commit()
 
 
+class Comment(db.Model):
+     tid = db.Column(db.Integer, primary_key = True)
+     pid = db.Column(db.Integer)
+     userid = db.Column(db.String(22))
+     nickname = db.Column(db.String(22))
+     title = db.Column(db.String(32))
+     content = db.Column(db.Text)
+     post_time = db.Column(db.String(19))
+     last_reply = db.Column(db.String(19))
+     re = db.Column(db.Integer, default = 0)
+     replys = db.relationship('Reply', backref = db.backref('comment',  passive_deletes = True))
+
+     def __init__(self, pid, userid, nickname, title, content, post_time):
+
+        self.pid = pid
+        self.userid = userid
+        self.nickname = nickname
+        self.title = title
+        self.content = content
+        self.post_time = post_time
+        self.last_reply = post_time
+
+class Reply(db.Model):
+
+    rid = db.Column(db.Integer, primary_key = True)
+    tid = db.Column(db.Integer, db.ForeignKey('comment.tid', ondelete = 'CASCADE'))
+    userid = db.Column(db.String(22))
+    nickname = db.Column(db.String(22))
+    content = db.Column(db.Text)
+    post_time = db.Column(db.String(19))
+
+    def __init__(self, tid, userid, nickname, content, post_time):
+        self.tid = tid
+        self.userid = userid
+        self.nickname = nickname
+        self.content = content
+        self.post_time = post_time

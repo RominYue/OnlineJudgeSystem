@@ -243,3 +243,29 @@ a:hover {
 .left {
     text-align: left;
 }
+
+.reply {
+    width: 80%;
+    margin: 0 auto;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.userinfo {
+    font-weight: bold;
+    width: 133px;
+    text-align: center;
+    border: 1px dashed #8080FF;
+    height: 44px;
+    padding-top: 0px;
+    background-color: #E5EDF2;
+}
+.content {
+    width: 742px;
+    vertical-align: top;
+    border: 1px dashed #8080FF;
+    background-color: #D7EBFF;
+}
+.tip {
+    text-align: right;
+    margin-top: 30px;
+}

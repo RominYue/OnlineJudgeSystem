@@ -66,3 +66,12 @@ class SearchSubmitForm(Form):
                                      ('Output Limit Exceeded', 'Output Limit Exceeded'), \
                                      ('Compile Error', 'Compile Error')])
 
+
+class PostForm(Form):
+    pid = IntegerField()
+    title = StringField()
+    content = TextField()
+
+class ReplyForm(Form):
+    content = TextField()
+

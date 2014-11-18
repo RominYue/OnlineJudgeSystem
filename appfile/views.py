@@ -5,9 +5,9 @@ from appfile import app, login_manager, db
 
 from flask import render_template,request,g, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm, SearchSubmitForm
-from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE, USER_NUM_ONE_PAGE
-from models import User, Problem, Submit
+from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm, SearchSubmitForm, PostForm, ReplyForm
+from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE, USER_NUM_ONE_PAGE, MAX_REPLY_NUM_ONE_PAGE
+from models import User, Problem, Submit, Comment, Reply
 from functools import wraps
 import os,time
 
@@ -282,8 +282,73 @@ def show_ranklist(page = 1):
 
     return render_template('ranklist.html', user_list = user_list, page = page, USER_NUM_ONE_PAGE =USER_NUM_ONE_PAGE )
 
-@app.route('/webboard/')
-def web_board():
-    return render_template('webboard.html')
+#@app.route('/webboard/')
+#def web_board():
+#    return render_template('webboard.html')
 
 
+@app.route('/discuss/')
+def discuss():
+    pid = request.args.get('pid')
+    if pid:
+        comment_list = Comment.query.filter_by(pid = pid).order_by('comment.last_reply DESC').all()
+    else:
+        comment_list = Comment.query.order_by('comment.last_reply DESC').all()
+    return render_template('discuss.html', comment_list = comment_list, pid = pid)
+
+@app.route('/discuss/newpost/',methods = ['GET','POST'])
+def newpost():
+    pid = request.args.get('pid')
+    form = PostForm()
+    if request.method == 'GET':
+        form = PostForm(pid = pid)
+        return render_template('newpost.html', form = form)
+    else:
+        if not Problem.query.filter_by(pid = form.pid.data).all():
+            return 'error'
+        comment = Comment(pid = form.pid.data, userid = current_user.userID, \
+                            nickname = current_user.nickname, title = form.title.data, \
+                            content = form.content.data, post_time = get_now_time())
+        db.session.add(comment)
+        db.session.commit()
+
+        return redirect(url_for('discuss', pid = pid))
+
+@app.route('/comment/<int:tid>/',methods = ['GET','POST'])
+def show_comment(tid):
+    form = ReplyForm()
+    if request.method == 'GET':
+        page = request.args.get('page')
+        if not page:
+            page = 1
+        else:
+            page = int(page)
+        if page == 1:
+            comment = Comment.query.filter_by(tid = tid).first()
+        else:
+            comment = None
+
+        title = Comment.query.filter_by(tid = tid).first().title
+        reply_list = Reply.query.filter_by(tid = tid).order_by('reply.rid').paginate(page, MAX_REPLY_NUM_ONE_PAGE)
+        return render_template('comment.html', tid = tid, title = title, comment = comment, page = page,reply_list = reply_list, form = form)
+    else:
+        reply = Reply(tid = tid, userid = current_user.userID, nickname = current_user.nickname, \
+                        content = form.content.data, post_time = get_now_time())
+
+        comment = Comment.query.filter_by(tid = tid).first()
+        comment.re += 1
+        db.session.add(reply)
+        db.session.commit()
+        return redirect(request.referrer)
+
+
+@app.route('/deletepost/')
+def deletepost():
+    if request.args.get('tid'):
+        Comment.query.filter_by(tid = request.args.get('tid')).delete()
+        db.session.commit()
+    elif request.args.get('rid'):
+        Reply.query.filter_by(rid = request.args.get('rid')).delete()
+        db.session.commit()
+
+    return redirect('/discuss/')
