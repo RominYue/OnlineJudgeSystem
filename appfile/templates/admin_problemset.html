@@ -1,6 +1,6 @@
 {% extends "admin_base.html" %}
 {% block content %}
-<center><a href="/admin/problemset/addproblem/"> Add Problem </a></center>
+<center><a href={{ url_for('admin_addproblem') }}> Add Problem </a></center>
 <center>
     {% for i in problem_list.iter_pages() %}
         {% if i == page %}

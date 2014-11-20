@@ -1,7 +1,14 @@
 {% extends "admin_base.html" %}
 {% block content %}
+<title>Admin AddProblem</title>
 <center><h3> Problem Information </h3></center>
-<form action="/admin/problemset/addproblem/" method="POST" enctype="multipart/form-data">
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+        <h3 class="center red"> {{ message[0] }} </h3>
+    {% endif %}
+    {% endwith %}
+<form action={{ url_for('admin_addproblem') }} method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}
     <table id="addproblem">
         <tr><td id="left"> Title </td><td> {{ form.title(id="ptitle") }}</td></tr>
         <tr><td id="left"> Time Limit </td><td> {{ form.time_limit(id = "ptitle") }} MS</td></tr>

@@ -1,11 +1,9 @@
 from appfile import db
-from config import PING
 
 class User(db.Model):
-    #id = db.Column(db.Integer, primary_key = True)
     userID = db.Column(db.String(22), primary_key = True, unique = True)
     nickname = db.Column(db.String(22),unique = True)
-    password = db.Column(db.String(100), index = True, unique = True)
+    password = db.Column(db.String(100),unique = True)
     is_admin = db.Column(db.Boolean)
     ac_count = db.Column(db.Integer, default = 0)
     submit_count = db.Column(db.Integer, default = 0)

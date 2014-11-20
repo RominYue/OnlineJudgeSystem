@@ -1,53 +1,92 @@
 from flask_wtf import Form
-from wtforms import TextField, BooleanField, PasswordField, TextAreaField, IntegerField, StringField, SelectField
-from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms import TextField, BooleanField, PasswordField, TextAreaField, IntegerField, StringField, SelectField, HiddenField
+from wtforms.validators import DataRequired, Length, EqualTo, InputRequired
 import re
 
 class RegisterForm(Form):
-    userID = TextField('user ID')
-    nickname = TextField('Nick Name')
-    password = PasswordField('PassWord')
-    rptpassword = PasswordField('Repeat Password')
+    userID = TextField('user ID', validators=[
+        InputRequired('Plsease enter IDs'),
+        Length(min = 4, max = 25,message='length must between 4 and 25')
+    ])
+    nickname = TextField('Nick Name', validators=[
+        InputRequired('Please enter nickname'),
+        Length(min = 4, max = 25,message='length must between 4 and 25')
+    ])
+    password = PasswordField('PassWord', validators=[
+        InputRequired('Please enter password'),
+        Length(min = 6, max = 16,message='length must between 6 and 25')
+    ])
+    rptpassword = PasswordField('Repeat Password', validators=[
+        InputRequired('Please enter password to confirm'),
+        Length(min = 4, max = 16,message='length must between 6 and 25'),
+        EqualTo('password','Password must be match')
+    ])
 
-    def validate_userID(self):
-        return re.match(r'^[a-zA-Z0-9]{3,22}$',self.userID.data)
+    #def validate_userID(self):
+    #    return re.match(r'^[a-zA-Z0-9]{3,22}$',self.userID.data)
 
-    def validate_nickname(self):
-        return 5 < len(self.nickname.data) < 23
+    #def validate_nickname(self):
+    #    return 5 < len(self.nickname.data) < 23
 
-    def validate_password(self):
-        return re.match(r'^[a-zA-Z0-9]{6,22}$',self.password.data)
+    #def validate_password(self):
+    #    return re.match(r'^[a-zA-Z0-9]{6,22}$',self.password.data)
 
-    def validate_equal(self):
-        return self.password.data == self.rptpassword.data
+    #def validate_equal(self):
+    #    return self.password.data == self.rptpassword.data
 
 
 class LoginForm(Form):
-    userID = TextField('user ID')
-    password = PasswordField('Password')
+    userID = TextField('user ID', validators=[
+        InputRequired('Plsease enter IDs'),
+    ])
+    password = PasswordField('PassWord', validators=[
+        InputRequired('Please enter password'),
+    ])
+    next_url = HiddenField()
 
-    def validate_userID(self):
-        return re.match(r'^[a-zA-Z0-9]{4,23}$', self.userID.data)
+    #def validate_userID(self):
+    #    return re.match(r'^[a-zA-Z0-9]{4,23}$', self.userID.data)
 
-    def validate_password(self):
-        return re.match(r'^[a-zA-Z0-9]{6,22}$', self.password.data)
+    #def validate_password(self):
+    #    return re.match(r'^[a-zA-Z0-9]{6,22}$', self.password.data)
 
 
 class ProblemForm(Form):
-    title = TextField('Title', [Length(max = 299)])
-    description = TextAreaField('Description', [Length(max = 9999)])
-    pinput = TextAreaField('Input', [Length(max = 9999)])
-    poutput = TextAreaField('Output', [Length(max = 9999)])
-    sinput = TextAreaField('Sample Input', [Length(max = 9999)])
-    soutput = TextAreaField('Sample Output', [Length(max = 9999)])
-    hint = TextAreaField('Hint', [Length(max = 9999)])
-    time_limit = IntegerField('Time Limit',[DataRequired()])
-    memory_limit = IntegerField('Memory Limit', [DataRequired()])
+    title = TextField('Title', validators=[
+        InputRequired('Title is needed for this problem'),
+        Length(max = 299, message='The max length is not over 300')
+    ])
+    description = TextAreaField('Description', [
+        Length(max = 9999,  message='The max length is not over 10000')
+    ])
+    pinput = TextAreaField('Input', [
+        Length(max = 9999, message='The max length is not over 10000')
+    ])
+    poutput = TextAreaField('Output', [
+        Length(max = 9999,message='The max length is not over 10000')
+    ])
+    sinput = TextAreaField('Sample Input', [
+        Length(max = 9999,message='The max length is not over 10000')
+    ])
+    soutput = TextAreaField('Sample Output', [
+        Length(max = 9999,message='The max length is not over 10000')
+    ])
+    hint = TextAreaField('Hint', [
+        Length(max = 9999,message='The max length is not over 10000')
+    ])
+    time_limit = IntegerField('Time Limit',[
+        DataRequired('You must set the value of time_limit')
+    ])
+    memory_limit = IntegerField('Memory Limit', [
+        DataRequired('You must set the value of memory_limit')
+    ])
 
 class SubmissionForm(Form):
     pid = IntegerField('Problem ID')
     language = SelectField('Language',choices = [('C','C'),('C++','C++'),('Python2.7','Python2.7')])
-    src = TextAreaField('Source Code')
+    src = TextAreaField('Source Code',[
+        DataRequired('No Source Code')
+    ])
 
 class SearchProblemForm(Form):
     pid = IntegerField('Problem ID')

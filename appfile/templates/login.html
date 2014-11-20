@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
+<title>Log in</title>
 <div>
+    <center><h2> Login Information </h2></center>
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+        <h3 class="center red"> {{ message[0] }} </h3>
+    {% endif %}
+    {% endwith %}
     <form action="/login/" method="POST">
         {{ form.csrf_token }}
-        <center><h2> Login Information </h2></center>
-        {% if error %}
-            <center><h3 class="error">{{ error }}</h3>></center>
-        {% endif %}
         <table id="login">
             <tr>
                 <td>{{ form.userID.label }}: </td>

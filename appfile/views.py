@@ -3,10 +3,10 @@
 
 from appfile import app, login_manager, db
 
-from flask import render_template,request,g, redirect, url_for
+from flask import render_template,request,g, redirect, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm, SearchSubmitForm, PostForm, ReplyForm
-from config import USERID_ERROR, NICKNAME_ERROR, PASSWORD_ERROR, EQUAL_ERROR, CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE, USER_NUM_ONE_PAGE, MAX_REPLY_NUM_ONE_PAGE
+from config import CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE, USER_NUM_ONE_PAGE, MAX_REPLY_NUM_ONE_PAGE
 from models import User, Problem, Submit, Comment, Reply
 from functools import wraps
 import os,time
@@ -22,10 +22,18 @@ def admin_required(func):
     return check
 
 def delete_data(file_name):
-    os.system('/'.join(['rm problems',file_name]))
+    os.system(' '.join(['rm',file_name]))
 
 def get_now_time():
     return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+
+def get_error(form):
+    error = None
+    for field in form:
+        if field.errors:
+            error = field.errors[0]
+            break
+    return error
 
 #userid just a parameter, no absolute with member in User
 @login_manager.user_loader
@@ -55,8 +63,15 @@ def userinfo(userID):
 
 @app.route('/login/', methods=['GET','POST'])
 def login():
-    form = LoginForm()
+    form = LoginForm(next_url = request.args.get('next'))
+    error = None
+
     if request.method == 'GET':
+        return render_template('login.html',form = form)
+    elif not form.validate():
+        error = get_error(form)
+        if error:
+            flash(error)
         return render_template('login.html',form = form)
     else:
         user = User.query.filter_by(userID = form.userID.data).first()
@@ -68,45 +83,32 @@ def login():
             error = None
 
         if error:
-            return render_template('login.html',form=form, error = error)
-        else:
-            login_user(user)
-            print repr(user) + 'login_user sucessfully'
-            return redirect('/')
+            flash(error)
+            return render_template('login.html',form=form)
+        login_user(user)
+        print repr(user) + 'login_user sucessfully'
+        return redirect(form.next_url.data or url_for('index'))
 
 @app.route('/register/',methods=['GET','POST'])
 def register():
     form = RegisterForm()
-    if request.method == 'GET':
-        return render_template('register.html',form=form)
-    else:
-        if not form.validate_userID():
-            error = USERID_ERROR
-        elif not form.validate_nickname():
-            error = NICKNAME_ERROR
-        elif not form.validate_password():
-            error = PASSWORD_ERROR
-        elif not form.validate_equal():
-            error = EQUAL_ERROR
-        elif User.query.get(form.userID.data) is not None:
-            error = EXIST_ERROR
-        else:
-            error = None
+    if request.method == 'POST' and form.validate():
+        user = User(form.userID.data, form.nickname.data,form.password.data)
+        user.save()
+        login_user(user)
+        return redirect(url_for('index'))
 
-        if error:
-            return render_template('register.html',form=form, error=error)
-        else:
-            user = User(form.userID.data, form.nickname.data,form.password.data)
-            user.save()
-            print 'sucessfully register!'
-            login_user(user)
-            return redirect('/')
+    error =  get_error(form)
+    if error:
+        flash(error)
+    return render_template('register.html',form=form)
+
 
 @app.route('/logout/')
 def logout():
     print repr(current_user) + 'logged out....'
     logout_user()
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/problemset/')
 @app.route('/problemset/page=<int:page>/')
@@ -150,16 +152,15 @@ def problemstatus():
 @login_required
 def submit_problem(pid):
     form = SubmissionForm(pid = pid)
-    if request.method == 'GET':
-        return render_template('submit.html',form = form,pid = pid)
-    else:
+    if request.method == 'POST' and form.validate():
         submit = Submit(runid = Submit.query.count() + 1, userid = current_user.userID,pid = form.pid.data, language = form.language.data, src = form.src.data, submit_time = get_now_time())
-
         submit.save()
-
         print "submit successfully"
-
-        return redirect('/status/')
+        return redirect(url_for('status'))
+    error = get_error(form)
+    if error:
+        flash(error)
+    return render_template('submit.html',form = form,pid = pid)
 
 @app.route('/status/', methods = ['GET','POST'])
 @app.route('/status/page=<int:page>')
@@ -179,7 +180,7 @@ def status(page = 1):
         if form.result.data and form.result.data != 'All':
             subq = subq.filter_by(result = form.result.data)
 
-        submit_list = subq.paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
+        submit_list = subq.order_by(Submit.runid.desc()).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
     else:
         submit_list = Submit.query.order_by(Submit.runid.desc()).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
     return render_template('status.html', submit_list = submit_list, form = form)
@@ -204,26 +205,33 @@ def admin_problemset(page = 1):
 
     return render_template('admin_problemset.html', page = page, problem_list = problem_list)
 
-@app.route('/admin/problemset/addproblem/', methods=['GET','POST'])
+
+
+@app.route('/admin/addproblem/', methods=['GET','POST'])
 @admin_required
 def admin_addproblem():
     form = ProblemForm()
-    if request.method == 'GET':
-        return render_template('admin_addproblem.html',form=form)
-    else:
+    error = None
+    if request.method == 'POST' and form.validate():
         inputfile = request.files['inputfile']
         outputfile = request.files['outputfile']
-        problem_count = Problem.query.count()
-        inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(problem_count + 1),'in'])))
-        outputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(problem_count + 1), 'out'])))
 
         problem = Problem(form.title.data, form.description.data, form.pinput.data, form.poutput.data, form.sinput.data, form.soutput.data, form.hint.data, form.time_limit.data, form.memory_limit.data)
-
         problem.save()
 
-        print 'upload successfully!'
+        inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(problem.pid),'in'])))
+        outputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(problem.pid),'out'])))
 
-        return redirect('/admin/problemset')
+        print 'upload successfully!'
+        return redirect(url_for('admin_problemset'))
+
+    error = get_error(form)
+
+    if error:
+        flash(error)
+
+    return render_template('admin_addproblem.html',form = form)
+
 
 @app.route('/admin/editproblem/<int:pid>/', methods=['GET','POST'])
 @admin_required
@@ -235,16 +243,19 @@ def admin_edit_problem(pid):
 
         return render_template('admin_editproblem.html', form = form, pid = pid)
     else:
-        delete_data('.'.join([str(pid),'in']))
-        delete_data('.'.join([str(pid),'out']))
         inputfile = request.files['inputfile']
         outputfile = request.files['outputfile']
-        inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid),'in'])))
-        outputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid), 'out'])))
+
+        if inputfile:
+            delete_data(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid),'in'])))
+            inputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid),'in'])))
+        if outputfile:
+            delete_data(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid), 'out'])))
+            outputfile.save(os.path.join(app.config['UPLOAD_FOLDER'], '.'.join([str(pid), 'out'])))
+
         Problem.query.filter_by(pid = pid).update({'title': form.title.data, 'description': form.description.data, 'pinput': form.pinput.data, 'poutput': form.poutput.data, 'sinput': form.sinput.data, 'soutput': form.soutput.data, 'hint': form.hint.data, 'time_limit': form.time_limit.data, 'memory_limit': form.memory_limit.data})
         db.session.commit()
-
-        return redirect('/admin/problemset')
+        return redirect(url_for('admin_problemset'))
 
 @app.route('/admin/hideproblem/<int:pid>/')
 @admin_required
@@ -252,8 +263,7 @@ def admin_hide_problem(pid):
     problem = Problem.query.get(pid)
     problem.visable = False
     db.session.commit()
-    print problem.visable
-    return redirect('/admin/problemset')
+    return redirect(url_for('admin_problemset'))
 
 
 @app.route('/admin/displayproblem/<int:pid>/')
@@ -262,7 +272,7 @@ def admin_display_problem(pid):
     problem = Problem.query.get(pid)
     problem.visable = True
     db.session.commit()
-    return redirect('/admin/problemset')
+    return redirect(url_for('admin_problemset'))
 
 @app.route('/viewcode/')
 def viewcode():

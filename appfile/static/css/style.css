@@ -120,30 +120,30 @@ a:hover {
     color: red;
 }
 #ptitle {
-    width: 99%;
+    width: 90%;
 }
 #desc {
-    width: 99%;
+    width: 90%;
     height: 233px;
 }
 #input {
-    width: 99%;
+    width: 90%;
     height: 210px;
 }
 #output {
-    width: 99%;
+    width: 90%;
     height: 210px;
 }
 #sinput {
-    width: 99%;
+    width: 90%;
     height: 99px;
 }
 #soutput {
-    width: 99%;
+    width: 90%;
     height: 99px;
 }
 #hint {
-    width: 99%;
+    width: 90%;
     height: 99px;
 }
 

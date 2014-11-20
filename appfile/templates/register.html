@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
+<title>Register</title>
 <div>
-    <form action = "/register/" method="POST">
+    <center><h2> Register Information </h2></center>
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+        <h3 class="center red"> {{ message[0] }} </h3>
+    {% endif %}
+    {% endwith %}
+    <form action ={{ url_for('register') }} method="POST">
         {{ form.csrf_token }}
-        <center><h2> Register Information </h2></center>
-        {% if error %}
-            <center><h3 class="error"> {{ error }}</h3></center>
-        {% endif %}
-
         <table id = "register">
             <tr>
                 <td>{{ form.userID.label }}</td>
