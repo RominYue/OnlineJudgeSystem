@@ -1,7 +1,4 @@
-#include <stdio.h>
-int main(){
-    int a,b;
-    while(scanf("%d %d",&a, &b) != EOF)
-        printf("%d\n",a+b);
-    return 0;
-}
+d        if ac_list:
+            ac_list = zip(*ac_list)[0]
+        if submit_list:
+            submit_list = zip(*submit_list)[0]

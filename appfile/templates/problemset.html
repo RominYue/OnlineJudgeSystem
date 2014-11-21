@@ -29,7 +29,13 @@
     </tr>
     {% for problem in problem_list.items %}
             <tr style={{ loop.cycle('',"background-color:#D7EBFF") }}>
-                <td></td>
+                <td>
+                    {% if problem.pid in ac_list %}
+                        <div class="green">Y</div>
+                    {% elif problem.pid in submit_list %}
+                        <div class="red">N</div>
+                    {% endif %}
+                </td>
                 <td> {{ problem.pid + 1000 }} </td>
                 <td align="left"><a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.title }} </a></td>
                 <td>{{ problem.ac_count }}</td>

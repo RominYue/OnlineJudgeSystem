@@ -117,7 +117,18 @@ def problemset(page = 1):
 
     problem_list = Problem.query.filter_by(visable = True).order_by(Problem.pid).paginate(page,MAX_PROBLEM_NUM_ONE_PAGE, False )
 
-    return render_template('problemset.html', page=page, problem_list = problem_list, form = form)
+    if current_user.is_authenticated():
+        #query by one entity, returns a list with turple(sqlalchemy.util._collections.KeyedTuple)
+        ac_list = db.session.query(Submit.pid).distinct().filter_by(userid = current_user.userID).filter_by(result = 'Accepted').all()
+        submit_list = db.session.query(Submit.pid).filter_by(userid = current_user.userID).all()
+        print submit_list
+        if ac_list:
+            ac_list = zip(*ac_list)[0]
+        if submit_list:
+            submit_list = zip(*submit_list)[0]
+    else:
+        ac_list, submit_list = [],[]
+    return render_template('problemset.html', page=page, problem_list = problem_list, form = form,ac_list = ac_list, submit_list = submit_list)
 
 @app.route('/showproblem/pid=<int:pid>/')
 def show_problem(pid):
