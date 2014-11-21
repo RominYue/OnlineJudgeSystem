@@ -1,12 +1,1 @@
-class a:
-	x = 1
-	y = 2
-	def __init__(self,x,y):
-		self.x = x
-		self.y = y
-
-
-b = a(2,2)
-for i in b:
-	print i
-
+1 2

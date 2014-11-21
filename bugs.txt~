@@ -1,5 +1,0 @@
-1.提交题目的时候,未登录,登录之后没有转向提交题目的页面而转向/index,即request.args.get('next')为None
-2.problem 的pid从1001开始
-models.py
-class Problem(db.Model):
-    pid = db.Column(db.Integer, Sequence("problem_pid_seq",start=1001,increment=1), primary_key=True)

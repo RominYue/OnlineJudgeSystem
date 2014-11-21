@@ -12,7 +12,7 @@
             <td class="content">
                 {{ comment.content }}
                 <div class="tip">
-                    {% if g.user.is_authenticated() and g.user.userID == comment.userid %}
+                    {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userID == comment.userid) %}
                         [<a href={{ url_for('deletepost', tid = comment.tid) }}> Delete </a>]
                     {% endif %}
                     {{ comment.post_time }}
@@ -29,8 +29,8 @@
             <td class="content">
                 {{ reply.content }}
                 <div class="tip">
-                    {% if g.user.is_authenticated() and g.user.userID == comment.userid %}
-                        [<a href={{ url_for('deletepost', tid = tid) }}> Delete </a>]
+                    {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userID == reply.userid) %}
+                        [<a href={{ url_for('deletepost', rid = reply.rid) }}> Delete </a>]
                     {% endif %}
                     {{ reply.post_time }}
                 </div>

@@ -141,7 +141,8 @@ def problemstatus():
 
     if not page:
         page = 1
-
+    else:
+        page = int(page)
 
     solution_list = Submit.query.filter_by(pid = pid, result = 'Accepted').order_by(Submit.time_used, Submit.memory_used).group_by(Submit.userid).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
 
@@ -292,18 +293,14 @@ def show_ranklist(page = 1):
 
     return render_template('ranklist.html', user_list = user_list, page = page, USER_NUM_ONE_PAGE =USER_NUM_ONE_PAGE )
 
-#@app.route('/webboard/')
-#def web_board():
-#    return render_template('webboard.html')
-
 
 @app.route('/discuss/')
 def discuss():
     pid = request.args.get('pid')
     if pid:
-        comment_list = Comment.query.filter_by(pid = pid).order_by('comment.last_reply DESC').all()
+        comment_list = Comment.query.filter_by(pid = pid).order_by(Comment.last_reply.desc()).all()
     else:
-        comment_list = Comment.query.order_by('comment.last_reply DESC').all()
+        comment_list = Comment.query.order_by(Comment.last_reply.desc()).all()
     return render_template('discuss.html', comment_list = comment_list, pid = pid)
 
 @app.route('/discuss/newpost/',methods = ['GET','POST'])
@@ -334,18 +331,18 @@ def show_comment(tid):
         else:
             page = int(page)
         if page == 1:
-            comment = Comment.query.filter_by(tid = tid).first()
+            comment = Comment.query.get(tid)
         else:
             comment = None
 
-        title = Comment.query.filter_by(tid = tid).first().title
-        reply_list = Reply.query.filter_by(tid = tid).order_by('reply.rid').paginate(page, MAX_REPLY_NUM_ONE_PAGE)
-        return render_template('comment.html', tid = tid, title = title, comment = comment, page = page,reply_list = reply_list, form = form)
+        title = Comment.query.get(tid).title
+        reply_list = Reply.query.filter_by(tid = tid).order_by(Reply.tid).paginate(page, MAX_REPLY_NUM_ONE_PAGE,False)
+        return render_template('showcomment.html', tid = tid, title = title, comment = comment, page = page,reply_list = reply_list, form = form)
     else:
         reply = Reply(tid = tid, userid = current_user.userID, nickname = current_user.nickname, \
                         content = form.content.data, post_time = get_now_time())
 
-        comment = Comment.query.filter_by(tid = tid).first()
+        comment = Comment.query.get(tid)
         comment.re += 1
         db.session.add(reply)
         db.session.commit()
@@ -355,10 +352,11 @@ def show_comment(tid):
 @app.route('/deletepost/')
 def deletepost():
     if request.args.get('tid'):
+        Comment.query.filter_by(tid = request.args.get('tid')).first()
         Comment.query.filter_by(tid = request.args.get('tid')).delete()
         db.session.commit()
     elif request.args.get('rid'):
+        Reply.query.filter_by(rid = request.args.get('rid')).first()
         Reply.query.filter_by(rid = request.args.get('rid')).delete()
         db.session.commit()
-
-    return redirect('/discuss/')
+    return redirect(request.referrer)
