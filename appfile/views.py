@@ -86,7 +86,6 @@ def login():
             flash(error)
             return render_template('login.html',form=form)
         login_user(user)
-        print repr(user) + 'login_user sucessfully'
         return redirect(form.next_url.data or url_for('index'))
 
 @app.route('/register/',methods=['GET','POST'])
@@ -106,7 +105,6 @@ def register():
 
 @app.route('/logout/')
 def logout():
-    print repr(current_user) + 'logged out....'
     logout_user()
     return redirect(url_for('index'))
 
@@ -328,7 +326,6 @@ def newpost():
                             nickname = current_user.nickname, title = form.title.data, \
                             content = form.content.data, post_time = get_now_time())
         comment.save()
-
         return redirect(url_for('discuss', pid = pid))
 
 @app.route('/comment/<int:tid>/',methods = ['GET','POST'])
