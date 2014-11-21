@@ -6,13 +6,13 @@
     {% if page == 1 %}
         <tr>
             <td class="userinfo">
-                <a href={{ url_for('userinfo', userID = comment.userid) }}> {{ comment.userid }} </a><br />
+                <a href={{ url_for('userinfo', userid = comment.userid) }}> {{ comment.userid }} </a><br />
                 ({{ comment.nickname }})
             </td>
             <td class="content">
                 {{ comment.content }}
                 <div class="tip">
-                    {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userID == comment.userid) %}
+                    {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userid == comment.userid) %}
                         [<a href={{ url_for('deletepost', tid = comment.tid) }}> Delete </a>]
                     {% endif %}
                     {{ comment.post_time }}
@@ -23,13 +23,13 @@
     {% for reply in reply_list.items %}
         <tr>
             <td class="userinfo">
-                <a href={{ url_for('userinfo', userID = reply.userid) }}> {{ reply.userid }} </a><br />
+                <a href={{ url_for('userinfo', userid = reply.userid) }}> {{ reply.userid }} </a><br />
                 ({{ reply.nickname }})
             </td>
             <td class="content">
                 {{ reply.content }}
                 <div class="tip">
-                    {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userID == reply.userid) %}
+                    {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userid == reply.userid) %}
                         [<a href={{ url_for('deletepost', rid = reply.rid) }}> Delete </a>]
                     {% endif %}
                     {{ reply.post_time }}

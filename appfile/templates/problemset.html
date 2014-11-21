@@ -36,7 +36,7 @@
                         <div class="red">N</div>
                     {% endif %}
                 </td>
-                <td> {{ problem.pid + 1000 }} </td>
+                <td> {{ problem.pid }} </td>
                 <td align="left"><a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.title }} </a></td>
                 <td>{{ problem.ac_count }}</td>
                 <td>{{ problem.submit_count }}</td>

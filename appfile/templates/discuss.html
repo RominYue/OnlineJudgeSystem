@@ -14,7 +14,7 @@
     {% for comment in comment_list %}
         <tr style="{{ loop.cycle('', 'background-color:#D7EBFF') }}">
             <td><a href={{ url_for('show_problem', pid = comment.pid) }}> {{ comment.pid }} </a></td>
-            <td><a href={{ url_for('userinfo', userID = comment.userid) }}> {{ comment.userid }} </a></td>
+            <td><a href={{ url_for('userinfo', userid = comment.userid) }}> {{ comment.userid }} </a></td>
             <td><a href={{ url_for('show_comment', tid = comment.tid) }}> {{ comment.title }} </a></td>
             <td> {{ comment.post_time.split()[0] }} </td>
             <td> {{ comment.last_reply }} </td>

@@ -1,15 +1,15 @@
 from appfile import db
 
 class User(db.Model):
-    userID = db.Column(db.String(22), primary_key = True, unique = True)
+    userid = db.Column(db.String(22), primary_key = True, unique = True)
     nickname = db.Column(db.String(22),unique = True)
     password = db.Column(db.String(100),unique = True)
     is_admin = db.Column(db.Boolean)
     ac_count = db.Column(db.Integer, default = 0)
     submit_count = db.Column(db.Integer, default = 0)
 
-    def __init__(self, userID, nickname, password, is_admin = False):
-        self.userID = userID
+    def __init__(self, userid, nickname, password, is_admin = False):
+        self.userid = userid
         self.nickname = nickname
         self.password = password
         self.is_admin = is_admin
@@ -27,7 +27,7 @@ class User(db.Model):
         return False
 
     def get_id(self):
-        return self.userID
+        return self.userid
 
     def save(self):
         db.session.add(self)
@@ -94,19 +94,19 @@ class Submit(db.Model):
 
 
 class Comment(db.Model):
-     tid = db.Column(db.Integer, primary_key = True)
-     pid = db.Column(db.Integer)
-     userid = db.Column(db.String(22))
-     nickname = db.Column(db.String(22))
-     title = db.Column(db.String(32))
-     content = db.Column(db.Text)
-     post_time = db.Column(db.String(19))
-     last_reply = db.Column(db.String(19))
-     re = db.Column(db.Integer, default = 0)
-     replys = db.relationship('Reply', backref = db.backref('comment',  passive_deletes = True))
 
-     def __init__(self, pid, userid, nickname, title, content, post_time):
+    tid = db.Column(db.Integer, primary_key = True)
+    pid = db.Column(db.Integer)
+    userid = db.Column(db.String(22))
+    nickname = db.Column(db.String(22))
+    title = db.Column(db.String(32))
+    content = db.Column(db.Text)
+    post_time = db.Column(db.String(19))
+    last_reply = db.Column(db.String(19))
+    re = db.Column(db.Integer, default = 0)
+    replys = db.relationship('Reply', backref = db.backref('comment'))
 
+    def __init__(self, pid, userid, nickname, title, content, post_time):
         self.pid = pid
         self.userid = userid
         self.nickname = nickname
@@ -114,6 +114,11 @@ class Comment(db.Model):
         self.content = content
         self.post_time = post_time
         self.last_reply = post_time
+
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
 class Reply(db.Model):
 
@@ -130,3 +135,8 @@ class Reply(db.Model):
         self.nickname = nickname
         self.content = content
         self.post_time = post_time
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+

@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Length, EqualTo, InputRequired
 import re
 
 class RegisterForm(Form):
-    userID = TextField('user ID', validators=[
+    userid = TextField('user ID', validators=[
         InputRequired('Plsease enter IDs'),
         Length(min = 4, max = 25,message='length must between 4 and 25')
     ])
@@ -36,7 +36,7 @@ class RegisterForm(Form):
 
 
 class LoginForm(Form):
-    userID = TextField('user ID', validators=[
+    userid = TextField('user ID', validators=[
         InputRequired('Plsease enter IDs'),
     ])
     password = PasswordField('PassWord', validators=[

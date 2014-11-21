@@ -44,7 +44,7 @@ def load_user(userid):
 def before_request():
     g.user = current_user
     if g.user.is_authenticated():
-        g.url = url_for('userinfo',userID = g.user.userID)
+        g.url = url_for('userinfo',userid = g.user.userid)
 
 
 @app.route('/')
@@ -52,11 +52,11 @@ def before_request():
 def index():
     return render_template('index.html')
 
-@app.route('/userinfo?userid=<userID>/')
-def userinfo(userID):
-    user = User.query.get(userID)
-    solved_problem_list = Submit.query.filter_by(userid = userID, result = 'Accepted').order_by(Submit.pid).distinct(Submit.pid).all()
-    user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userID).all()
+@app.route('/userinfo?userid=<userid>/')
+def userinfo(userid):
+    user = User.query.get(userid)
+    solved_problem_list = Submit.query.filter_by(userid = userid, result = 'Accepted').order_by(Submit.pid).distinct(Submit.pid).all()
+    user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userid).all()
     rank  = user_list.index(user) + 1
 
     return render_template('userinfo.html', user = user, rank = rank, solved_problem_list = solved_problem_list)
@@ -74,7 +74,7 @@ def login():
             flash(error)
         return render_template('login.html',form = form)
     else:
-        user = User.query.filter_by(userID = form.userID.data).first()
+        user = User.query.filter_by(userid = form.userid.data).first()
         if user is None:
             error = CHECK_USERID_ERROR
         elif user.password != form.password.data:
@@ -93,7 +93,7 @@ def login():
 def register():
     form = RegisterForm()
     if request.method == 'POST' and form.validate():
-        user = User(form.userID.data, form.nickname.data,form.password.data)
+        user = User(form.userid.data, form.nickname.data,form.password.data)
         user.save()
         login_user(user)
         return redirect(url_for('index'))
@@ -119,8 +119,8 @@ def problemset(page = 1):
 
     if current_user.is_authenticated():
         #query by one entity, returns a list with turple(sqlalchemy.util._collections.KeyedTuple)
-        ac_list = db.session.query(Submit.pid).distinct().filter_by(userid = current_user.userID).filter_by(result = 'Accepted').all()
-        submit_list = db.session.query(Submit.pid).filter_by(userid = current_user.userID).all()
+        ac_list = db.session.query(Submit.pid).distinct().filter_by(userid = current_user.userid).filter_by(result = 'Accepted').all()
+        submit_list = db.session.query(Submit.pid).filter_by(userid = current_user.userid).all()
         print submit_list
         if ac_list:
             ac_list = zip(*ac_list)[0]
@@ -141,7 +141,7 @@ def search_problem():
     if form.pid.data is None:
         return redirect('/problemset/')
     else:
-        return redirect(url_for('show_problem', pid = (form.pid.data - 1000)))
+        return redirect(url_for('show_problem', pid = form.pid.data))
 
 
 @app.route('/problemstatus/')
@@ -165,7 +165,7 @@ def problemstatus():
 def submit_problem(pid):
     form = SubmissionForm(pid = pid)
     if request.method == 'POST' and form.validate():
-        submit = Submit(runid = Submit.query.count() + 1, userid = current_user.userID,pid = form.pid.data, language = form.language.data, src = form.src.data, submit_time = get_now_time())
+        submit = Submit(runid = Submit.query.count() + 1, userid = current_user.userid,pid = form.pid.data, language = form.language.data, src = form.src.data, submit_time = get_now_time())
         submit.save()
         print "submit successfully"
         return redirect(url_for('status'))
@@ -300,7 +300,7 @@ def show_faq():
 @app.route('/ranklist/<int:page>/')
 def show_ranklist(page = 1):
 
-    user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userID).paginate(page,USER_NUM_ONE_PAGE, False)
+    user_list = User.query.order_by(User.ac_count.desc(), User.submit_count, User.userid).paginate(page,USER_NUM_ONE_PAGE, False)
 
     return render_template('ranklist.html', user_list = user_list, page = page, USER_NUM_ONE_PAGE =USER_NUM_ONE_PAGE )
 
@@ -324,11 +324,10 @@ def newpost():
     else:
         if not Problem.query.filter_by(pid = form.pid.data).all():
             return 'error'
-        comment = Comment(pid = form.pid.data, userid = current_user.userID, \
+        comment = Comment(pid = form.pid.data, userid = current_user.userid, \
                             nickname = current_user.nickname, title = form.title.data, \
                             content = form.content.data, post_time = get_now_time())
-        db.session.add(comment)
-        db.session.commit()
+        comment.save()
 
         return redirect(url_for('discuss', pid = pid))
 
@@ -350,12 +349,12 @@ def show_comment(tid):
         reply_list = Reply.query.filter_by(tid = tid).order_by(Reply.tid).paginate(page, MAX_REPLY_NUM_ONE_PAGE,False)
         return render_template('showcomment.html', tid = tid, title = title, comment = comment, page = page,reply_list = reply_list, form = form)
     else:
-        reply = Reply(tid = tid, userid = current_user.userID, nickname = current_user.nickname, \
+        reply = Reply(tid = tid, userid = current_user.userid, nickname = current_user.nickname, \
                         content = form.content.data, post_time = get_now_time())
 
         comment = Comment.query.get(tid)
         comment.re += 1
-        db.session.add(reply)
+        reply.save()
         db.session.commit()
         return redirect(request.referrer)
 
@@ -363,11 +362,10 @@ def show_comment(tid):
 @app.route('/deletepost/')
 def deletepost():
     if request.args.get('tid'):
-        Comment.query.filter_by(tid = request.args.get('tid')).first()
         Comment.query.filter_by(tid = request.args.get('tid')).delete()
         db.session.commit()
+        return redirect(url_for('discuss'))
     elif request.args.get('rid'):
-        Reply.query.filter_by(rid = request.args.get('rid')).first()
         Reply.query.filter_by(rid = request.args.get('rid')).delete()
         db.session.commit()
-    return redirect(request.referrer)
+        return redirect(request.referrer)

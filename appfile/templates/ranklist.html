@@ -13,7 +13,7 @@
     {% for user in user_list.items %}
         <tr style="{{ loop.cycle('', 'background-color:#D7EBFF') }}">
             <td> {{ USER_NUM_ONE_PAGE * (page - 1) + user_list.items.index(user) + 1 }} </td>
-            <td><a href={{ url_for('userinfo', userID = user.userID) }}> {{ user.userID }} </a></td>
+            <td><a href={{ url_for('userinfo', userid = user.userID) }}> {{ user.userid }} </a></td>
             <td> {{ user.nickname }} </td>
             <td> {{ user.ac_count }} </td>
             <td> {{ user.submit_count }} </td>

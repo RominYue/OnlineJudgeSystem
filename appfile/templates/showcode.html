@@ -17,7 +17,7 @@
                 <tr>
                     <td> Problem: <a href={{ url_for('show_problem', pid = submit.pid)}}> {{ submit.pid + 1000}} </a></td>
                     <td width="10px"></td>
-                    <td> User: <a href={{ url_for('userinfo', userID = submit.userid)}}> {{ submit.userid }}</a></td>
+                    <td> User: <a href={{ url_for('userinfo', userid = submit.userid)}}> {{ submit.userid }}</a></td>
                 </tr>
                 <tr>
                     <td> Memory: {{ submit.memory_used }} K </td>
