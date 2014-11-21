@@ -1,32 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
-<title>Log in</title>
-<div>
-    <center><h2> Login Information </h2></center>
-    {% with message = get_flashed_messages() %}
-    {% if message %}
-        <h3 class="center red"> {{ message[0] }} </h3>
-    {% endif %}
-    {% endwith %}
-    <form action="/login/" method="POST">
-        {{ form.csrf_token }}
-        <table id="login">
-            <tr>
-                <td>{{ form.userid.label }}: </td>
-                <td>{{ form.userid(size = 20 )}}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label }}: </td>
-                <td>{{ form.password(size = 20) }}</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="Submit">
-                    <input type="reset"  value="Reset">
-                </td>
-            </tr>
-        </table>
-    </form>
-</div>
+<link href={{ url_for('static', filename="css/signin.css") }} rel="stylesheet">
+<title>Sign in</title>
+    <div class="container">
+        <form class="form-signin" role="form" action={{ url_for('login') }} method='POST'>
+            {{ form.csrf_token }}
+            <h3 >Sign In</h3>
+            {% with message = get_flashed_messages() %}
+            {% if message %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Warning!</strong> {{ message[0] }}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <hr>
+            <div class="form-group">
+                {{ form.userid.label(class="control-label") }}
+                {{ form.userid(class="form-control", placeholder="Enter UserID") }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="control-label") }}
+                {{ form.password(class="form-control", placeholder="Enter password") }}
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox">Remember me
+                </label>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

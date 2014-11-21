@@ -1,37 +1,60 @@
 {% extends "base.html" %}
 {% block content %}
-<title>Register</title>
-<div>
-    <center><h2> Register Information </h2></center>
-    {% with message = get_flashed_messages() %}
-    {% if message %}
-        <h3 class="center red"> {{ message[0] }} </h3>
-    {% endif %}
-    {% endwith %}
-    <form action ={{ url_for('register') }} method="POST">
+<link href={{ url_for('static', filename="css/signin.css") }} rel="stylesheet">
+<title>Sign up</title>
+<div class="container">
+    <form class="form-signin form-horizontal" role="form" action={{ url_for('register') }} method='POST'>
         {{ form.csrf_token }}
-        <table id = "register">
-            <tr>
-                <td>{{ form.userid.label }}</td>
-                <td>{{ form.userid(size = 20) }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.nickname.label }}</td>
-                <td>{{ form.nickname(size = 20) }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label }}</td>
-                <td>{{ form.password(size = 20) }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.rptpassword.label }}</td>
-                <td>{{ form.rptpassword(size = 20) }}</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Submit" name="submit"><input type = "reset" value="Reset" name="reset"></td>
-            </tr>
-        </table>
+        <h3 class="form-signin-heading">Sign Up</h3>
+        {% with message = get_flashed_messages() %}
+        {% if message %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Warning!</strong> {{ message[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        <hr>
+        <div class="form-group">
+            <div class="col-sm-3">
+            {{ form.userid.label(class="text-left control-label") }}
+            </div>
+            <div class="col-sm-9">
+            {{ form.userid(class="form-control", placeholder="Enter UserID") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3">
+            {{ form.nickname.label(class="text-left control-label") }}
+            </div>
+            <div class="col-sm-9">
+            {{ form.nickname(class="form-control", placeholder="Enter NickName") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3">
+            {{ form.password.label(class="text-left control-label") }}
+            </div>
+            <div class="col-sm-9">
+            {{ form.password(class="form-control" , placeholder="Enter Password") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3">
+            {{ form.rptpassword.label(class="text-left control-label") }}
+            </div>
+            <div class="col-sm-9">
+            {{ form.rptpassword(class="form-control", placeholder="Confirm Password") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <button type="submit" class="btn btn-primary">Sign up</button>
+            </div>
+        </div>
     </form>
 </div>
 {% endblock %}

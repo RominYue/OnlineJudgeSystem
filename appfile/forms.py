@@ -4,20 +4,20 @@ from wtforms.validators import DataRequired, Length, EqualTo, InputRequired
 import re
 
 class RegisterForm(Form):
-    userid = TextField('user ID', validators=[
+    userid = TextField('User ID', validators=[
         InputRequired('Plsease enter IDs'),
         Length(min = 4, max = 25,message='length must between 4 and 25')
     ])
-    nickname = TextField('Nick Name', validators=[
+    nickname = TextField('Nickname', validators=[
         InputRequired('Please enter nickname'),
         Length(min = 4, max = 25,message='length must between 4 and 25')
     ])
-    password = PasswordField('PassWord', validators=[
+    password = PasswordField('Password', validators=[
         InputRequired('Please enter password'),
         Length(min = 6, max = 16,message='length must between 6 and 25')
     ])
-    rptpassword = PasswordField('Repeat Password', validators=[
-        InputRequired('Please enter password to confirm'),
+    rptpassword = PasswordField('Confirm', validators=[
+        InputRequired('Enter password to confirm'),
         Length(min = 4, max = 16,message='length must between 6 and 25'),
         EqualTo('password','Password must be match')
     ])
@@ -36,10 +36,10 @@ class RegisterForm(Form):
 
 
 class LoginForm(Form):
-    userid = TextField('user ID', validators=[
+    userid = TextField('User ID', validators=[
         InputRequired('Plsease enter IDs'),
     ])
-    password = PasswordField('PassWord', validators=[
+    password = PasswordField('Password', validators=[
         InputRequired('Please enter password'),
     ])
     next_url = HiddenField()
