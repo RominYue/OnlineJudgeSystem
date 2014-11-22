@@ -1,15 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
 <title> New Post </title>
-<h2 class="blue"> Post New Thread </h2>
-<form action={{ url_for('newpost') }} method="POST">
-    {{ form.csrf_token }}
-    Problem ID:<br/>
-    {{ form.pid(id="thread", size=7) }}<br />
-    Title:<br />
-    {{ form.title(id="thread", size=77) }}<br />
-    Content:<br />
-    {{ form.content(id="thread", rows = 20, cols = 77)}}<br />
-    <input type="submit" value="Submit">
-</form>
+<div class="container">
+    <center><h2>Post New Thread</h2></center>
+    <form role="form" action={{ url_for('newpost') }} method="POST">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <label class="label-control">Problem ID</label>
+            {{ form.pid(class="form-control", placeholder="Enter Problem ID") }}
+        </div>
+        <div class="form-group">
+            <label class="label-control">Title</label>
+            {{ form.title(class="form-control", placeholder="Enter title") }}
+        </div>
+        <div class="form-group">
+            <label class="label-control">Content</label>
+            {{ form.content(class="form-control",rows="5") }}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

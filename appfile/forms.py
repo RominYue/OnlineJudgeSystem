@@ -109,7 +109,7 @@ class SearchSubmitForm(Form):
 class PostForm(Form):
     pid = IntegerField()
     title = StringField()
-    content = TextField()
+    content = TextAreaField()
 
 class ReplyForm(Form):
     content = TextField()

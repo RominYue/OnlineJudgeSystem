@@ -1,26 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
 <title> Web Board </title>
-[<a href={{ url_for('newpost', pid = pid) }}> New Thread </a>]
-<table id="list">
-    <tr>
-        <th width="100px"> Problem ID </th>
-        <th width="139px"> Author </th>
-        <th> Title </th>
-        <th width="94px"> Post Date </th>
-        <th width="144px"> Last Reply </th>
-        <th width="30px"> Re </th>
-    </tr>
-    {% for comment in comment_list %}
-        <tr style="{{ loop.cycle('', 'background-color:#D7EBFF') }}">
-            <td><a href={{ url_for('show_problem', pid = comment.pid) }}> {{ comment.pid }} </a></td>
-            <td><a href={{ url_for('userinfo', userid = comment.userid) }}> {{ comment.userid }} </a></td>
-            <td><a href={{ url_for('show_comment', tid = comment.tid) }}> {{ comment.title }} </a></td>
-            <td> {{ comment.post_time.split()[0] }} </td>
-            <td> {{ comment.last_reply }} </td>
-            <td> {{ comment.re }} </td>
-        </tr>
-    {% endfor %}
-</table>
+<br>
+<div class="container">
+    <a href={{ url_for('newpost', pid = pid) }} class="btn btn-success"> Ask a question </a>
+    <br><br>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr class="info">
+                <th width="100px">Problem ID</th>
+                <th width="139px">Author</th>
+                <th style="text-align: center">Title</th>
+                <th width="94px">Post Date</th>
+                <th width="200px">Last Reply</th>
+                <th width="40px">Re</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in comment_list %}
+            <tr>
+                <td>
+                    <a href={{ url_for('show_problem', pid = comment.pid) }}>{{ comment.pid }}</a>
+                </td>
+                <td>
+                    <a href={{ url_for('userinfo', userid = comment.userid) }}>{{ comment.userid }}</a>
+                </td>
+                <td style="text-align: center">
+                    <a href={{ url_for('show_comment', tid = comment.tid) }}>{{ comment.title }}</a>
+                </td>
+                <td>{{ comment.post_time.split()[0] }}</td>
+                <td>{{ comment.last_reply }}</td>
+                <td>{{ comment.re }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
 

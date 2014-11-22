@@ -168,12 +168,8 @@ a:hover {
 #ps_submit {
     width: 8%;
 }
-.search {
-    width: 85%;
-}
+
 #problem {
-    width: 88%;
-    margin: 0 auto;
     font-family: Arial, Helvetica, monospace;
 }
 
