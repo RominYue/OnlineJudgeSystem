@@ -163,25 +163,27 @@ a:hover {
 }
 
 #ps_is_ac {
-    width: 50px;
+    width: 5%;
 }
 
 #ps_pid {
-    width: 120px;
+    width: 12%;
 }
 
 #ps_title {
-    width: 675px;
+    width: 67%;
 }
 
 #ps_ac {
-    width: 66px;
+    width: 8%;
 }
 
 #ps_submit {
-    width: 66px;
+    width: 8%;
 }
-
+.search {
+    width: 85%;
+}
 #problem {
     width: 88%;
     margin: 0 auto;

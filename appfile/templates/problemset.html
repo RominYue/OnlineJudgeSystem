@@ -1,46 +1,67 @@
 {% extends "base.html" %}
 {% block content %}
-<center>
-    {% for i in problem_list.iter_pages() %}
-        {% if i == page %}
-            {{ i }}
-        {% else %}
-            <a href={{ url_for('problemset', page = i) }}> {{ i }} </a>
-        {% endif %}
-    {% endfor %}
-</center>
-<form action={{ url_for('search_problem') }} method="POST">
-    {{ form.csrf_token }}
-    <table class="center">
-        <tr>
-            <td> Problem ID : </td>
-            <td> {{ form.pid(size=7) }} </td>
-            <td><button type="submit"> Go </button></td>
-        </tr>
-    </table>
-</form>
-<table id = "problemset">
-    <tr>
-        <th id="ps_is_ac"></th>
-        <th id="ps_pid"> Problem ID </th>
-        <th id="ps_title"> Title </th>
-        <th id="ps_ac"> AC Rate </th>
-        <th id="ps_submit"> Submit </th>
-    </tr>
-    {% for problem in problem_list.items %}
-            <tr style={{ loop.cycle('',"background-color:#D7EBFF") }}>
-                <td>
-                    {% if problem.pid in ac_list %}
-                        <div class="green">Y</div>
-                    {% elif problem.pid in submit_list %}
-                        <div class="red">N</div>
-                    {% endif %}
-                </td>
-                <td> {{ problem.pid }} </td>
-                <td align="left"><a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.title }} </a></td>
-                <td>{{ problem.ac_count }}</td>
-                <td>{{ problem.submit_count }}</td>
-            </tr>
-    {% endfor %}
-</table>
+<div class="container">
+    <br><br>
+    <div class="row">
+        <form role="form" action={{ url_for('search_problem') }} method="POST">
+            {{ form.csrf_token }}
+            <div class="col-sm-3">
+                <div class="input-group">
+                    {{ form.pid(class="form-control input-sm", placeholder="Search Problem ID") }}
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-sm" type="submit">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr class="info">
+                        <th id="ps_is_ac"></th>
+                        <th id="ps_pid">Problem ID</th>
+                        <th id="ps_title">Title</th>
+                        <th id="ps_ac">AC</th>
+                        <th id="ps_submit">Submit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for problem in problem_list.items %}
+                    <tr>
+                        <td>
+                            {% if problem.pid in ac_list %}
+                            <span class="glyphicon glyphicon-ok" style="color: green"></span>
+                            {% elif problem.pid in submit_list %}
+                            <span class="glyphicon glyphicon-remove" style="color: red"></span>
+                            {% endif %}
+                        </td>
+                        <td>{{ problem.pid }}</td>
+                        <td align="left">
+                            <a href={{ url_for('show_problem', pid = problem.pid) }}>{{ problem.title }}</a>
+                        </td>
+                        <td>{{ problem.ac_count }}</td>
+                        <td>{{ problem.submit_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+          <ul class="pager">
+            <li><a href={{ url_for('problemset') }}>Top</a></li>
+            {% if problem_list.has_prev %}
+            <li><a href={{ url_for('problemset', page = problem_list.prev_num) }}>&larr; Previous</a></li>
+            {% endif %}
+            {% if problem_list.has_next %}
+            <li><a href={{ url_for('problemset', page = problem_list.next_num) }}>Next &rarr;</a></li>
+            {% endif %}
+        </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}
