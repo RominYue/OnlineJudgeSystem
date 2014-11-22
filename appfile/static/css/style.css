@@ -3,126 +3,26 @@
      width: 1222px;
      min-height: 100%;
      margin: 0 auto;
- }
+}
 
+#submitinfo {
+    margin: 0 auto;
+    font-size: 16px;
+}
 #wrapper2 {
     position: relative;
     width: 1111px;
     top: 20px;
     margin: 0 auto;
 }
-
-.title {
+.center {
     text-align: center;
-    color: red;
-    font-size: 29px;
-    font-weight: bold;
 }
-
-#navbar {
-    color: white;
-    width: 1111px;
-    background-color: #AFEEEE;
-    margin: 0 auto;
-    border-collapse: collapse;
-    font-weight: bold;
-}
-
-#navbar td {
-    text-align: center;
-    font-size: 17px;
-    color: black;
-    width: 133px;
-    border: 1px solid white;
-    padding: 4px 7px 4px 7px;
-}
-
-#contact {
-    position: relative;
-    top: 420px;
-    text-align: center;
-    font-size: 19px;
-}
-a:link {
-    text-decoration: none;
-}
-
-a:active {
-    text-decoration:blink;
-}
-
-a:hover {
-    color: orange;
-}
-
-#register {
-    width: 333px;
-    height: 200px;
-    margin: 0 auto;
-    background-color: #F0FFFF;
-}
-
-#login {
-    width: 333px;
-    height: 100px;
-    margin: 0 auto;
-    background-color: #F0FFFF;
-}
-
-#admin {
-    text-decoration: none;
-    color: red;
-    font-weight: bold;
-}
-
-.error{
-    color: red;
-}
-
-#left {
-    width: 111px;
-    text-align: center;
-    font-weight: bold;
+.blue {
     color: blue;
-}
-
-#addproblem {
-    width: 80%;
-    margin: 0 auto;
-}
-
-#left a {
-    /*color: white;*/
-}
-#left a:hover {
-    color: red;
-}
-#right {
-
-}
-#right a {
-    color: white;
-}
-#right a:hover {
-    color: red;
 }
 #ptitle {
     width: 90%;
-}
-
-#problemset {
-    width: 89%;
-    border-collapse: collapse;
-    margin: 0 auto;
-    font-size: 15px;
-}
-
-
-#problemset th {
-    padding: 4px 7px 4px 7px;
-    background-color: #1A5CC8;
-    border: 1px solid white;
-    color: white;
 }
 
 #ps_is_ac {
@@ -144,7 +44,32 @@ a:hover {
 #ps_submit {
     width: 8%;
 }
+.userinfo {
+    font-weight: bold;
+    width: 133px;
+    text-align: center;
+    border: 1px dashed #8080FF;
+    height: 44px;
+    padding-top: 0px;
+    background-color: #E5EDF2;
+}
+.reply {
+    width: 80%;
+    margin: 0 auto;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.content {
+    width: 742px;
+    vertical-align: top;
+    border: 1px dashed #8080FF;
+    background-color: #D7EBFF;
+}
 
+.tip {
+    text-align: right;
+    margin-top: 30px;
+}
 #problem {
     font-family: Arial, Helvetica, monospace;
 }
@@ -163,28 +88,41 @@ a:hover {
     height: auto;
     padding: 0px 20px;
 }
+a:link {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration:blink;
+}
+
+a:hover {
+    color: orange;
+}
+
+.error{
+    color: red;
+}
+
+#left {
+    width: 111px;
+    text-align: center;
+    font-weight: bold;
+    color: blue;
+}
+
+#left a:hover {
+    color: red;
+}
+#right a {
+    color: white;
+}
+#right a:hover {
+    color: red;
+}
+
 #submitlist {
      width: 1000px;
-}
-
-#submitinfo {
-    margin: 0 auto;
-    font-size: 16px;
-}
-
-#list {
-    width: 1111px;
-    border-collapse: collapse;
-    margin: 0 auto;
-    font-size: 16px;
-    text-align: center;
-}
-
-#list th {
-    padding: 4px 7px 4px 7px;
-    background-color: #1A5CC8;
-    border: 1px solid white;
-    color: white;
 }
 
 .blue {
@@ -196,35 +134,6 @@ a:hover {
 .red {
     color: red;
 }
-.center {
-    text-align: center;
-}
-.left {
-    text-align: left;
-}
 
-.reply {
-    width: 80%;
-    margin: 0 auto;
-    word-wrap: break-word;
-    word-break: break-all;
-}
-.userinfo {
-    font-weight: bold;
-    width: 133px;
-    text-align: center;
-    border: 1px dashed #8080FF;
-    height: 44px;
-    padding-top: 0px;
-    background-color: #E5EDF2;
-}
-.content {
-    width: 742px;
-    vertical-align: top;
-    border: 1px dashed #8080FF;
-    background-color: #D7EBFF;
-}
-.tip {
-    text-align: right;
-    margin-top: 30px;
-}
+
+
