@@ -1,20 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
 <title>Submit Your Solution</title>
-<center><h3 class="blue"> Submit Your Solution </h3></center>
-    {% with message = get_flashed_messages() %}
-    {% if message %}
-        <h3 class="center red"> {{ message[0] }} </h3>
-    {% endif %}
-    {% endwith %}
-<form action={{ url_for('submit_problem', pid = pid) }} method="POST">
-    {{ form.csrf_token }}
-    <div class="center">
-        Problem ID: {{ form.pid.data }} <br />
-        Language: {{ form.language }}<br />
-        Source Code<br />
-        {{ form.src(rows = 30, cols = 79) }}<br />
-        <input type="submit" value="Submit" > <input type="reset" value="Reset">
+<div class="container">
+    <center><h3 class="blue"> Submit Your Solution </h3></center>
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+        {% with message = get_flashed_messages() %}
+        {% if message %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Warning!</strong> {{ message[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        </div>
     </div>
-</form>
+    <br>
+    <form action={{ url_for('submit_problem', pid = pid) }} method="POST">
+        {{ form.csrf_token }}
+        <div class="center">
+            Problem ID: {{ form.pid.data }}
+            <br />
+            Language: {{ form.language }}
+            <br />
+            Source Code
+            <br />
+            {{ form.src(rows = 30, cols = 79) }}
+            <br />
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-default">Reset</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

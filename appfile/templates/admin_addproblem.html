@@ -1,33 +1,100 @@
 {% extends "admin_base.html" %}
 {% block content %}
 <title>Admin AddProblem</title>
-<center><h3> Problem Information </h3></center>
-    {% with message = get_flashed_messages() %}
-    {% if message %}
-        <h3 class="center red"> {{ message[0] }} </h3>
-    {% endif %}
-    {% endwith %}
-<form action={{ url_for('admin_addproblem') }} method="POST" enctype="multipart/form-data">
+<div class="container">
+    <center><h3> Problem Information </h3></center>
+    <br>
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+        {% with message = get_flashed_messages() %}
+        {% if message %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Warning!</strong> {{ message[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        </div>
+    </div>
+    <form class="form-horizontal" role="form" action={{ url_for('admin_addproblem') }} method="POST" enctype="multipart/form-data">
     {{ form.csrf_token }}
-    <table id="addproblem">
-        <tr><td id="left"> Title </td><td> {{ form.title(id="ptitle") }}</td></tr>
-        <tr><td id="left"> Time Limit </td><td> {{ form.time_limit(id = "ptitle") }} MS</td></tr>
-        <tr><td id="left"> Memory Limit </td><td> {{ form.memory_limit(id = "ptitle") }} K</td></tr>
-        <tr><td id="left"> Description </td><td> {{ form.description(id="desc") }} </td></tr>
-        <tr><td id="left"> Input </td><td> {{ form.pinput(id="input") }} </td></tr>
-        <tr><td id="left"> Output </td><td> {{ form.poutput(id="output") }} </td></tr>
-        <tr><td id="left"> Sample Input </td><td> {{ form.sinput(id="sinput") }} </td></tr>
-        <tr><td id="left"> Sample Output </td><td> {{ form.soutput(id="soutput") }} </td></tr>
-        <tr><td id="left"> Hint </td><td> {{ form.hint(id="hint") }} </td></tr>
-        <tr><td id="left"> Input File </td><td><input type="file" name="inputfile"></td></tr>
-        <tr><td id="left"> Output File </td><td><input type="file" name="outputfile"></td></tr>
-        <tr>
-            <td></td>
-            <td align="center">
-                <input value="Submit" type="submit">
-                <input value="Reset" type="reset">
-            </td>
-        </tr>
-    </table>
-</form>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Title</label>
+            <div class="col-sm-8">
+                {{ form.title(class="form-control") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Time Limit</label>
+            <div class="col-sm-8">
+                {{ form.time_limit(class="form-control") }}
+            </div>
+            <div class="col-sm-1">MS</div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Memory Limit</label>
+            <div class="col-sm-8">
+                {{ form.memory_limit(class="form-control") }}
+            </div>
+            <div class="col-sm-1">K</div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Description</label>
+            <div class="col-sm-8">
+                {{ form.description(class="form-control") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Input</label>
+            <div class="col-sm-8">
+                {{ form.pinput(class="form-control", rows = "5") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Output</label>
+            <div class="col-sm-8">
+                {{ form.poutput(class="form-control",rows = "5") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Sample Input</label>
+            <div class="col-sm-8">
+                {{ form.sinput(class="form-control") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Sample Output</label>
+            <div class="col-sm-8">
+                {{ form.soutput(class="form-control") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Hint</label>
+            <div class="col-sm-8">
+                {{ form.hint(class="form-control") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Input File</label>
+            <div class="col-sm-8">
+                <input type="file" name="inputfile">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Output File</label>
+            <div class="col-sm-8">
+                <input type="file" name="outputfile">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-default">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock %}

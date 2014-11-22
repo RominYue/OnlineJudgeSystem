@@ -109,30 +109,6 @@ a:hover {
 #ptitle {
     width: 90%;
 }
-#desc {
-    width: 90%;
-    height: 233px;
-}
-#input {
-    width: 90%;
-    height: 210px;
-}
-#output {
-    width: 90%;
-    height: 210px;
-}
-#sinput {
-    width: 90%;
-    height: 99px;
-}
-#soutput {
-    width: 90%;
-    height: 99px;
-}
-#hint {
-    width: 90%;
-    height: 99px;
-}
 
 #problemset {
     width: 89%;
