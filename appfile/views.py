@@ -203,7 +203,7 @@ def show_compile_info(runid):
 @app.route('/admin/')
 @admin_required
 def admin():
-    return render_template('admin.html')
+    return redirect(url_for('admin_problemset'))
 
 
 @app.route('/admin/problemset/')
