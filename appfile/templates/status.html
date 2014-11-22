@@ -1,82 +1,105 @@
 {% extends "base.html" %}
 {% block content %}
 <title>Problem Status List</title>
-<center><h3 style="color: blue"> Problem Status List </h3></center>
-<div style="width:1111px" class="center">
-<form action={{ url_for('status') }} method="POST">
-    {{ form.csrf_token }}
-    <table class="center">
-        <tr>
-            <td> Problem ID : </td>
-            <td> {{ form.pid(size=7) }} </td>
-            <td></td>
+<div class="container">
+    <center><h3> Problem Status List </h3></center>
+    <br>
+        <form role="form" action={{ url_for('status') }} method="POST">
+            {{ form.csrf_token }}
+            <table class="table">
+                <thead>
+                <tr>
+                    <td><label class="control-label text-center">Problem</label></td>
+                    <td>{{ form.pid(class="form-control input-sm") }}</td>
+                    <td></td>
 
-            <td> User : </td>
-            <td> {{ form.userid(size=10) }} </td>
-            <td></td>
+                    <td><label class="control-label">User</label></td>
+                    <td>{{ form.userid(class="form-control input-sm") }}</td>
+                    <td></td>
 
-            <td> Language : </td>
-            <td> {{ form.language }} </td>
-            <td></td>
+                    <td><label class="control-label">Language</label></td>
+                    <td>{{ form.language(class="form-control input-sm") }}</td>
+                    <td></td>
 
-            <td> Result : </td>
-            <td> {{ form.result }} </td>
-            <td><button type="submit"> Search </button></td>
-        </tr>
+                    <td><label class="control-label">Result</label></td>
+                    <td>{{ form.result(class="form-control input-sm") }}</td>
+                    <td>
+                        <button type="submit" class="btn btn-primary btn-sm"> Search </button>
+                    </td>
+                </tr>
+                </thead>
+            </table>
+        </form>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr class="info">
+                <th>RunID</th>
+                <th>User</th>
+                <th>Problem</th>
+                <th>Result</th>
+                <th>Memory</th>
+                <th>Time</th>
+                <th>Language</th>
+                <th>Code Length</th>
+                <th>Submit Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for submit in submit_list.items %}
+            <tr>
+                <td>{{ submit.runid }}</td>
+                <td>
+                    <a href={{ url_for('userinfo',userid = submit.userid) }}>{{ submit.userid }}</a>
+                </td>
+                <td>
+                    <a href={{ url_for('show_problem', pid = submit.pid) }}>{{ submit.pid }}</a>
+                </td>
+                <td>
+                {% if submit.result == 'Accepted' %}
+                    <button type="button" class="btn btn-success btn-sm">Accepted</button>
+                {% elif submit.result == 'Pending' %}
+                    <button type="button" class="btn btn-default btn-sm">Pending</button>
+                {% elif submit.result == 'Presentation Error' or submit.result == 'Wrong Answer' %}
+                    <button type="button" class="btn btn-danger btn-sm">{{ submit.result }}</button>
+                {% else %}
+                    {% if submit.result == 'Compile Error' %}
+                        <a target="_blank" class="btn btn-warning btn-sm" href={{ url_for('show_compile_info',runid = submit.runid) }}>{{ submit.result }}</a>
+                    {% else %}
+                        <button type="button" class="btn btn-warning btn-sm">{{ submit.result }}</button>
+                    {% endif %}
+                {% endif%}
+                </td>
+                {% if submit.result == 'Accepted' %}
+                    <td>{{ submit.memory_used }} K</td>
+                    <td>{{ submit.time_used }} MS</td>
+                {% else %}
+                    <td></td>
+                    <td></td>
+                {% endif %}
+                <td>
+                    <a target="_blank" href={{ url_for('viewcode', runid = submit.runid) }}>{{ submit.language }}</a>
+                </td>
+                <td>{{ submit.length }}</td>
+                <td>{{ submit.submit_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-</form>
-</div>
-<table id="list">
-    <tr>
-        <th> RunID</th>
-        <th> User </th>
-        <th> Problem </th>
-        <th> Result </th>
-        <th> Memory </th>
-        <th> Time </th>
-        <th> Language </th>
-        <th> Code Length </th>
-        <th> Submit Time </th>
-    </tr>
-    {% for submit in submit_list.items %}
-    <tr style="{{ loop.cycle('','background-color:#D7EBFF') }}">
-        <td> {{ submit.runid }}  </td>
-        <td> <a href={{ url_for('userinfo',userid = submit.userid) }}>{{ submit.userid }}</a> </td>
-        <td> <a href={{ url_for('show_problem', pid = submit.pid) }}>{{ submit.pid }}</a> </td>
-        {% if submit.result == 'Accepted' %}
-            {% set status = "blue" %}
-        {% elif submit.result == 'Pending' or submit.result == 'Runing' or submit.result == 'Compile Error' %}
-            {% set status = "green" %}
-        {% else %}
-            {% set status = "red" %}
-        {% endif%}
-        <td class={{ status }}>
-            {% if submit.result == 'Compile Error' %}
-                <a target="_blank" href={{ url_for('show_compile_info', runid = submit.runid) }}>{{ submit.result }}</a>
-            {% else %}
-                {{ submit.result }}
-            {% endif %}
-        </td>
-        {% if submit.result == 'Accepted' %}
-            <td> {{ submit.memory_used }} K </td>
-            <td> {{ submit.time_used }} MS </td>
-        {% else %}
-            <td></td>
-            <td></td>
+
+    <ul class="pager">
+        <li>
+            <a href={{ url_for('status') }}>Top</a>
+        </li>
+        {% if submit_list.has_prev %}
+        <li>
+            <a href={{ url_for('status', page = submit_list.prev_num) }}>&larr; Previous</a>
+        </li>
         {% endif %}
-        <td><a target="_blank" href={{ url_for('viewcode', runid = submit.runid) }}> {{ submit.language }} </a></td>
-        <td> {{ submit.length }}</td>
-        <td> {{ submit.submit_time }} </td>
-    </tr>
-    {% endfor %}
-</table>
-<div class="center">
-    <a href="/status/"> [First Page] </a>
-    {% if submit_list.has_prev %}
-    <a href={{ url_for('status', page = submit_list.prev_num) }}> [Previous Page] </a>
-    {% endif %}
-    {% if submit_list.has_next %}
-    <a href={{ url_for('status', page = submit_list.next_num) }}> [Next Page] </a>
-    {% endif %}
+        {% if submit_list.has_next %}
+        <li>
+            <a href={{ url_for('status', page = submit_list.next_num) }}>Next &rarr;</a>
+        </li>
+        {% endif %}
+    </ul>
 </div>
 {% endblock %}

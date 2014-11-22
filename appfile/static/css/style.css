@@ -43,11 +43,6 @@
     text-align: center;
     font-size: 19px;
 }
-#admin {
-    text-decoration: none;
-    color: red;
-    font-weight: bold;
-}
 a:link {
     text-decoration: none;
 }

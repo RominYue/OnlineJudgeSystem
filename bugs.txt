@@ -5,3 +5,4 @@ class Problem(db.Model):
     pid = db.Column(db.Integer, Sequence("problem_pid_seq",start=1001,increment=1), primary_key=True)
 3. status筛选题目的时候,点击prev,next会出现bug,返回的是所有的题目,即form表单的内容存不下来
 4. ce_error 编码错误
+5. 如何使footer固定在底部
