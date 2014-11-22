@@ -73,8 +73,8 @@
                     <td>{{ submit.memory_used }} K</td>
                     <td>{{ submit.time_used }} MS</td>
                 {% else %}
-                    <td></td>
-                    <td></td>
+                    <td>0 K</td>
+                    <td>0 MS</td>
                 {% endif %}
                 <td>
                     <a target="_blank" href={{ url_for('viewcode', runid = submit.runid) }}>{{ submit.language }}</a>

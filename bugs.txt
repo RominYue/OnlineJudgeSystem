@@ -6,3 +6,5 @@ class Problem(db.Model):
 3. status筛选题目的时候,点击prev,next会出现bug,返回的是所有的题目,即form表单的内容存不下来
 4. ce_error 编码错误
 5. 如何使footer固定在底部
+6. 只有个人才能看到自己提交的代码,admin可以看所有人的代码.
+
