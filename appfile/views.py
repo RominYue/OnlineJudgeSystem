@@ -257,6 +257,11 @@ def admin_addproblem():
 
     return render_template('admin_addproblem.html',form = form)
 
+@app.route('/admin/deleteproblem/<int:pid>')
+def admin_delete_problem(pid):
+    Problem.query.filter_by(pid = pid).delete()
+    db.session.commit()
+    return redirect(url_for('admin_problemset'))
 
 @app.route('/admin/editproblem/<int:pid>/', methods=['GET','POST'])
 @admin_required
