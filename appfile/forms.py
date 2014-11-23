@@ -50,6 +50,22 @@ class LoginForm(Form):
     #def validate_password(self):
     #    return re.match(r'^[a-zA-Z0-9]{6,22}$', self.password.data)
 
+class ModifyUserForm(Form):
+    userid = TextField('User ID')
+    nickname = TextField('Nickname', validators=[
+        InputRequired('Please enter nickname'),
+        Length(min = 4, max = 25,message='length must between 4 and 25')
+    ])
+    password = PasswordField('NewPassword', validators=[
+        InputRequired('Please enter password'),
+        Length(min = 6, max = 16,message='length must between 6 and 25')
+    ])
+    rptpassword = PasswordField('Confirm', validators=[
+        InputRequired('Enter password to confirm'),
+        Length(min = 4, max = 16,message='length must between 6 and 25'),
+        EqualTo('password','Password must be match')
+    ])
+
 
 class ProblemForm(Form):
     title = TextField('Title', validators=[

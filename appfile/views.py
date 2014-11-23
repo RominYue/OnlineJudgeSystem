@@ -5,7 +5,7 @@ from appfile import app, login_manager, db
 
 from flask import render_template,request,g, redirect, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required, current_user
-from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm, SearchSubmitForm, PostForm, ReplyForm
+from forms import RegisterForm, LoginForm, ProblemForm, SubmissionForm, SearchProblemForm, SearchSubmitForm, PostForm, ReplyForm, ModifyUserForm
 from config import CHECK_USERID_ERROR, CHECK_PASSWORD_ERROR, EXIST_ERROR, PERMISSION_ERROR, INPUT_ERROR, UPLOAD_SUCESS, MAX_PROBLEM_NUM_ONE_PAGE, MAX_SUBMIT_NUM_ONE_PAGE, USER_NUM_ONE_PAGE, MAX_REPLY_NUM_ONE_PAGE
 from models import User, Problem, Submit, Comment, Reply
 from functools import wraps
@@ -60,6 +60,21 @@ def userinfo(userid):
     rank  = user_list.index(user) + 1
 
     return render_template('userinfo.html', user = user, rank = rank, solved_problem_list = solved_problem_list)
+
+@app.route('/modifyuser/<userid>',methods=['GET','POST'])
+def modify_user(userid):
+    user = User.query.get(userid)
+    form = ModifyUserForm(userid = user.userid,nickname = user.nickname)
+    if request.method == 'POST' and form.validate():
+        User.query.filter_by(userid = userid).update({'nickname':form.nickname.data, 'password':form.password.data})
+        db.session.commit()
+        return redirect(url_for('userinfo',userid = userid))
+    error = get_error(form)
+    if error:
+        flash(error)
+    return render_template('modify_user.html', form = form,user = user)
+
+
 
 @app.route('/login/', methods=['GET','POST'])
 def login():

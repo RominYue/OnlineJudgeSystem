@@ -1,17 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
 <title> User--{{ user.userid }} </title>
-<div id="wrapper2" class="center">
-    <h4 class="green"> {{ user.nickname }} </h4>
-    <table class="center" style="background-color:#D7EBFF">
-        <tr><td class="left" style="width:200px"> Rank </td><td style="width:50px"> {{ rank }} </td></tr>
-        <tr><td class="left"> Submissions </td><td> {{ user.submit_count }} </td></tr>
-        <tr><td class="left"> Problems Solved </td><td> {{ user.ac_count }} </td></tr>
-    </table>
-    <p class="center" style="width:600px">
-        {% for problem in solved_problem_list %}
-            <a href={{ url_for('show_problem', pid = problem.pid) }}> {{ problem.pid }} </a>
-        {% endfor %}
-    </p>
+<div id="wrapper2" class="container">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href={{ url_for('userinfo',userid = user.userid) }}>Profile</a>
+        </li>
+        {% if g.user.userid == user.userid %}
+        <li role="presentation">
+            <a href={{ url_for('modify_user', userid = user.userid) }}>ModifyUser</a>
+        </li>
+        {% endif %}
+    </ul>
+    <center><h2>Personal Information</h2></center>
+    <div class="row">
+        <div class="col-sm-5">
+            <img src={{ url_for('static', filename='image/anonimous.jpg') }} alt="anonimous image" height="60%" width="60%" />
+        </div>
+        <div class="col-sm-5">
+            <table class="table">
+                <br><br>
+                <tr>
+                    <td class="left">Username</td>
+                    <td>{{ user.nickname }}</td>
+                </tr>
+                <tr>
+                    <td class="left" style="width:200px">Rank</td>
+                    <td style="width:50px">{{ rank }}</td>
+                </tr>
+                <tr>
+                    <td class="left">Submissions</td>
+                    <td>{{ user.submit_count }}</td>
+                </tr>
+                <tr>
+                    <td class="left">Problems Solved</td>
+                    <td>{{ user.ac_count }}</td>
+                </tr>
+            </table>
+            <p class="left">
+                {% for problem in solved_problem_list %}
+                <a href={{ url_for('show_problem', pid = problem.pid) }}>{{ problem.pid }}</a>
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
