@@ -10,9 +10,10 @@
     <link type="text/css" rel="stylesheet" href={{ url_for('static', filename='css/shThemeEclipse.css')}}>
     <script type="text/javascript">SyntaxHighlighter.all()</script>
 </head>
-<div id="wrapper2">
+<div id="wrapper2" class="container">
     <h2 class="center"> Online Judge FAQ </h2>
     <hr >
+    <div class="well">
         <p>
             <font color='green'>Q</font>:What is the compiler the judge is using and what are the compiler options?<br>
             <font color='red'>A</font>:The online judge system is running on <a href="http://www.debian.org/">Debian Linux</a>. We are using <a href="http://gcc.gnu.org/">GNU GCC/G++</a> for C/C++ compile, <a href="http://www.python.org">Python2.7</a> for python compile.<br>
@@ -34,7 +35,9 @@
             </tr>
         </table>
     </ul>
+    </div>
     <hr >
+    <div class="well">
         <p>
             <font color='green'>Q</font>:Where is the input and the output?<br>
             <font color='red'>A</font>:Your program shall read input from stdin('Standard Input') and write output to stdout('Standard Output').For example,you can use 'scanf' in C or 'cin' in C++ to read from stdin,and use 'printf' in C or 'cout' in C++ to write to stdout.<br>
@@ -69,7 +72,9 @@
                 print a + b
             </pre>
         </p>
+    </div>
     <hr >
+    <div class="well">
         <p>
             <font color='green'>Q</font>:Why did I get a Compile Error? It's well done!<br>
             <font color='red'>A</font>:There are some differences between GNU and MS-VC++, such as:<br>
@@ -89,7 +94,9 @@
                 </li>
             </ul>
         </p>
+    </div>
     <hr >
+    <div class="well">
         <p>
             <font color='green'>Q</font>:What is the meaning of the judge's reply XXXXX?<br>
             <font color='red'>A</font>:Here is a list of the judge's replies and their meaning:<br><br>
@@ -106,9 +113,12 @@
             <font color='blue'>Runtime Error</font> : All the other Error on the running phrase will get Runtime Error, such as 'segmentation fault','floating point exception','used forbidden functions', 'tried to access forbidden memories' and so on.<br><br>
             <font color='blue'>Compile Error</font> : The compiler (gcc/g++/gpc) could not compile your ANSI program. Of course, warning messages are not error messages. Click the link at the judge reply to see the actual error message.<br><br>
         </p>
+    </div>
     <hr>
+    <div class="well">
         <font color='green'>Q</font>:How to attend Online Contests?<br>
         <font color='red'>A</font>:Can you submit programs for any practice problems on this Online Judge? If you can, then that is the account you use in an online contest.
         If you can't, then please <a href={{ url_for('register') }}>register</a> an id with password first.<br><br>
+    </div>
 </div>
 {% endblock %}
