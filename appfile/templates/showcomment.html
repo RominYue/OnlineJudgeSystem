@@ -1,61 +1,66 @@
 {% extends "base.html" %}
 {% block content %}
 <title> Comment </title>
+<div class="container">
 <h3 class="center">{{ title }}</h3>
-<table class="reply">
     {% if page == 1 %}
-        <tr>
-            <td class="userinfo">
-                <a href={{ url_for('userinfo', userid = comment.userid) }}> {{ comment.userid }} </a><br />
-                ({{ comment.nickname }})
-            </td>
-            <td class="content">
-                {{ comment.content }}
-                <div class="tip">
-                    {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userid == comment.userid) %}
-                        [<a href={{ url_for('deletepost', tid = comment.tid) }}> Delete </a>]
-                    {% endif %}
-                    {{ comment.post_time }}
-                </div>
-            </td>
-        </tr>
+        <div class="media well" style="background-color: #DDDDFF">
+            <a class="media-left" href="#">
+                <img src={{ url_for('static', filename='image/anonimous.jpg') }} alt="user image" height="70px" width="70px"></a>
+            <div class="media-body">
+                <h5 class="media-heading">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <a href={{ url_for('userinfo', userid = comment.userid) }}>{{ comment.nickname }}</a>
+                </h5>
+                <p>{{ comment.content }}</p>
+                {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userid == comment.userid) %}
+                [<a href={{ url_for('deletepost', tid = comment.tid) }}> Delete </a>]
+                {% endif %}
+                {{ comment.post_time }}
+            </div>
+        </div>
     {% endif %}
     {% for reply in reply_list.items %}
-        <tr>
-            <td class="userinfo">
-                <a href={{ url_for('userinfo', userid = reply.userid) }}> {{ reply.userid }} </a><br />
-                ({{ reply.nickname }})
-            </td>
-            <td class="content">
-                {{ reply.content }}
-                <div class="tip">
-                    {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userid == reply.userid) %}
-                        [<a href={{ url_for('deletepost', rid = reply.rid) }}> Delete </a>]
-                    {% endif %}
-                    {{ reply.post_time }}
-                </div>
-            </td>
-        </tr>
+        <div class="media well">
+            <a class="media-left" href="#">
+                <img src={{ url_for('static', filename='image/anonimous.jpg') }} alt="user image" height="70px" width="70px"></a>
+            <div class="media-body">
+                <h5 class="media-heading">
+                    <span class="glyphicon glyphicon-user"></span>
+                    <a href={{ url_for('userinfo', userid = reply.userid) }}> {{ reply.nickname }} </a>
+                </h5>
+                <p>{{ reply.content }}</p>
+                {% if g.user.is_authenticated() and (g.user.is_admin or g.user.userid == reply.userid) %}
+                    [<a href={{ url_for('deletepost', rid = reply.rid) }}> Delete </a>]
+                {% endif %}
+                {{ reply.post_time }}
+            </div>
+        </div>
     {% endfor %}
-    <tr>
-        <td></td>
-        <td>
+    <div>
             {% if g.user.is_authenticated() %}
                 <form action={{ url_for('show_comment', tid = tid )}} method="POST">
-                    {{ form.content(id="thread", rows = 10, cols = 77) }}<br />
-                    <input type="submit" value="Reply">
+                    <div class="form-group">
+                    {{ form.content(class="form-control") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Reply</button>
                 </form>
             {% endif %}
-        </td>
-    </tr>
-</table>
-<div class="center">
-    {% for i in reply_list.iter_pages() %}
-        {% if page == i %}
-            <span class="red"> {{ i }} </span>
-        {% else %}
-            <a href={{ url_for('show_comment', tid = tid, page = i) }}> {{ i }} </a>
+    </div>
+    <ul class="pager">
+        <li>
+            <a href={{ url_for('show_comment', tid = tid, page = 1) }}>Top</a>
+        </li>
+        {% if reply_list.has_prev %}
+        <li>
+            <a href={{ url_for('show_comment', tid = tid, page = reply_list.prev_num) }}>&larr; Previous</a>
+        </li>
         {% endif %}
-    {% endfor %}
+        {% if reply_list.has_next %}
+        <li>
+            <a href={{ url_for('show_comment', tid = tid,page = reply_list.next_num) }}>Next &rarr;</a>
+        </li>
+        {% endif %}
+    </ul>
 </div>
 {% endblock %}

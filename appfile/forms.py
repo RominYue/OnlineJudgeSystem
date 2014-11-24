@@ -128,5 +128,5 @@ class PostForm(Form):
     content = TextAreaField()
 
 class ReplyForm(Form):
-    content = TextField()
+    content = TextAreaField()
 
