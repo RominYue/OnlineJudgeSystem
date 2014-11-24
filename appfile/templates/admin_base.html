@@ -37,14 +37,22 @@
                     </ul>
                     {% if g.user.is_authenticated() %}
                     <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href={{ g.url }}>{{ g.user.userid }}</a>
-                        </li>
-                        <li>
-                            <a href="/">Home</a>
-                        </li>
-                        <li>
-                            <a href="/logout/">Logout</a>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" style="color:orange;margin-right: 10px" data-toggle="dropdown" href="#">
+                                {{ g.user.userid }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href={{ g.url }}>Profile</a>
+                                </li>
+                                <li>
+                                    <a href="/">Home Page</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="/logout/">Logout</a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                     {% else %}

@@ -38,11 +38,25 @@
                     </ul>
                     {% if g.user.is_authenticated() %}
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href={{ g.url }}>{{ g.user.userid }}</a></li>
-                            {% if g.user.is_admin %}
-                                <li><a href="/admin/">Admin</a></li>
-                            {% endif %}
-                            <li><a href="/logout/">Logout</a></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" style="color:orange;margin-right: 10px" data-toggle="dropdown" href="#">
+                                    {{ g.user.userid }}
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href={{ g.url }}>Profile</a>
+                                    </li>
+                                    {% if g.user.is_admin %}
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="/admin/">Admin Page</a>
+                                    </li>
+                                    {% endif %}
+                                    <li role="presentation" class="divider"></li>
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="/logout/">Logout</a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     {% else %}
                     <div class="navbar-form navbar-right">
