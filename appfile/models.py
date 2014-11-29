@@ -1,3 +1,6 @@
+#!usr/bin/env python2
+# _*_ coding:utf-8 _*_
+
 from appfile import db
 
 class User(db.Model):

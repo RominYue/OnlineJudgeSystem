@@ -4,8 +4,7 @@
 <div class="container">
     <center><h3> Problem Status List </h3></center>
     <br>
-        <form role="form" action={{ url_for('status') }} method="POST">
-            {{ form.csrf_token }}
+        <form role="form" action={{ url_for('status') }} method="GET">
             <table class="table">
                 <thead>
                 <tr>
@@ -77,7 +76,11 @@
                     <td>0 MS</td>
                 {% endif %}
                 <td>
+                    {% if g.user.userid == submit.userid or g.user.is_admin %}
                     <a target="_blank" href={{ url_for('viewcode', runid = submit.runid) }}>{{ submit.language }}</a>
+                    {% else %}
+                        {{ submit.language }}
+                    {% endif %}
                 </td>
                 <td>{{ submit.length }}</td>
                 <td>{{ submit.submit_time }}</td>
@@ -88,16 +91,16 @@
 
     <ul class="pager">
         <li>
-            <a href={{ url_for('status') }}>Top</a>
+            <a href={{ url_for('status',pid = pid,userid = userid, result = result, language = language) }}>Top</a>
         </li>
         {% if submit_list.has_prev %}
         <li>
-            <a href={{ url_for('status', page = submit_list.prev_num) }}>&larr; Previous</a>
+            <a href={{ url_for('status', page = submit_list.prev_num, pid = pid,userid = userid, result = result, language = language) }}>&larr; Previous</a>
         </li>
         {% endif %}
         {% if submit_list.has_next %}
         <li>
-            <a href={{ url_for('status', page = submit_list.next_num) }}>Next &rarr;</a>
+            <a href={{ url_for('status', page = submit_list.next_num,pid = pid,userid = userid, result = result, language = language) }}>Next &rarr;</a>
         </li>
         {% endif %}
     </ul>

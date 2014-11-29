@@ -1,3 +1,7 @@
+#!usr/bin/env python2
+# _*_ coding:utf-8 _*_
+
+
 import time
 import Queue
 from appfile.judge import put_task_into_queue, work

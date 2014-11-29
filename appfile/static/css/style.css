@@ -110,5 +110,9 @@ a:hover {
     color: red;
 }
 
+.foot{
+    position: relative;
+    clear:both;
+}
 
 

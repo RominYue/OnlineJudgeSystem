@@ -1,3 +1,7 @@
+#!usr/bin/env python2
+# _*_ coding:utf-8 _*_
+
+
 import os
 
 from appfile import db

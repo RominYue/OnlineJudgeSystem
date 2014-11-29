@@ -1,3 +1,7 @@
+#!usr/bin/env python2
+# _*_ coding:utf-8 _*_
+
+
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -23,7 +27,7 @@ INPUT_ERROR = 'Input Limit Exceeded'
 UPLOAD_SUCESS = 'Uploaded Successfully'
 
 MAX_PROBLEM_NUM_ONE_PAGE = 2
-MAX_SUBMIT_NUM_ONE_PAGE = 3
+MAX_SUBMIT_NUM_ONE_PAGE = 2
 USER_NUM_ONE_PAGE = 2
 MAX_REPLY_NUM_ONE_PAGE = 2
 

@@ -187,28 +187,31 @@ def submit_problem(pid):
         flash(error)
     return render_template('submit.html',form = form,pid = pid)
 
-@app.route('/status/', methods = ['GET','POST'])
+@app.route('/status/')
 @app.route('/status/page=<int:page>')
 def status(page = 1):
-    form = SearchSubmitForm()
 
-    if request.method == 'POST':
+    pid = request.args.get('pid')
+    userid = request.args.get('userid')
+    result = request.args.get('result')
+    language = request.args.get('language')
 
-        subq = Submit.query
+    form = SearchSubmitForm(request.args)
 
-        if form.pid.data:
-            subq = subq.filter_by(pid = form.pid.data)
-        if form.userid.data:
-            subq = subq.filter_by(userid = form.userid.data)
-        if form.language.data and form.language.data != 'All':
-            subq = subq.filter_by(language = form.language.data)
-        if form.result.data and form.result.data != 'All':
-            subq = subq.filter_by(result = form.result.data)
+    subq = Submit.query
 
-        submit_list = subq.order_by(Submit.runid.desc()).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
-    else:
-        submit_list = Submit.query.order_by(Submit.runid.desc()).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
-    return render_template('status.html', submit_list = submit_list, form = form)
+    if pid:
+        subq = subq.filter_by(pid = pid)
+    if userid:
+        subq = subq.filter_by(userid = userid)
+    if language and language != 'All':
+        subq = subq.filter_by(language = language)
+    if result and result != 'All':
+        subq = subq.filter_by(result = result)
+
+    submit_list = subq.order_by(Submit.runid.desc()).paginate(page, MAX_SUBMIT_NUM_ONE_PAGE, False)
+
+    return render_template('status.html', submit_list = submit_list, form = form, pid = pid, userid = userid, result = result, language = language)
 
 @app.route('/showcompileinfo/<int:runid>')
 def show_compile_info(runid):
@@ -258,6 +261,7 @@ def admin_addproblem():
     return render_template('admin_addproblem.html',form = form)
 
 @app.route('/admin/deleteproblem/<int:pid>')
+@admin_required
 def admin_delete_problem(pid):
     Problem.query.filter_by(pid = pid).delete()
     db.session.commit()

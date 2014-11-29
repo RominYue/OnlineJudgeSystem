@@ -5,6 +5,9 @@ import os
 import os.path
 import subprocess, shlex
 import lorun
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 from appfile import db
 from models import Submit, Problem, User
@@ -80,9 +83,9 @@ def compile(runid, language):
     if p.returncode == 0:
         return True
     else:
-        #error = ' '.join([output,outerror])
-        #Submit.query.filter_by(runid = runid).update({'ce_error': error})
-        #db.session.commit()
+        error = u' '.join([output,outerror])
+        Submit.query.filter_by(runid = runid).update({'ce_error': error})
+        db.session.commit()
         return False
 
 def judge(runid, pid, language):
